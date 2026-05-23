@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เรียนอ่านภาษาไทย</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;800&family=Kanit:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF9F0;
+    --pink:#FF6B9D; --green:#4CAF50; --blue:#4ECDC4;
+    --yellow:#FFD93D; --orange:#FF8C42; --purple:#A78BFA;
+    --indigo:#6366F1; --teal:#0D9488; --amber:#F59E0B; --rust:#DC6B19;
+    --dark:#2D2D2D;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Sarabun',sans-serif;
+    background:var(--cream);
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    overflow-x:hidden;position:relative;
+  }
+
+  /* blobs */
+  .bg-blob{position:fixed;border-radius:50%;opacity:.10;animation:bfloat 7s ease-in-out infinite;pointer-events:none;z-index:0;}
+  .bg-blob:nth-child(1){width:300px;height:300px;background:var(--pink);top:-80px;left:-80px;animation-delay:0s;}
+  .bg-blob:nth-child(2){width:200px;height:200px;background:var(--blue);bottom:60px;right:-60px;animation-delay:2.5s;}
+  .bg-blob:nth-child(3){width:150px;height:150px;background:var(--yellow);top:45%;left:-50px;animation-delay:5s;}
+  @keyframes bfloat{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-24px) rotate(6deg);}}
+
+  /* header */
+  header{
+    position:relative;z-index:1;
+    width:100%;max-width:520px;
+    text-align:center;
+    padding:40px 24px 20px;
+  }
+  .site-badge{
+    display:inline-block;
+    background:var(--pink);color:white;
+    font-size:13px;font-weight:800;
+    padding:5px 18px;border-radius:20px;
+    letter-spacing:.5px;margin-bottom:14px;
+  }
+  .site-title{
+    font-family:'Kanit',sans-serif;font-size:32px;font-weight:800;
+    color:var(--dark);line-height:1.2;margin-bottom:6px;
+  }
+  .site-sub{font-size:14px;color:#999;font-weight:600;}
+
+  /* main content */
+  main{
+    position:relative;z-index:1;
+    width:100%;max-width:520px;
+    padding:0 20px 60px;
+    display:flex;flex-direction:column;gap:28px;
+  }
+
+  /* section */
+  .section-header{
+    display:flex;align-items:center;gap:10px;margin-bottom:12px;
+  }
+  .section-pill{
+    font-size:12px;font-weight:800;padding:4px 14px;
+    border-radius:20px;color:white;white-space:nowrap;letter-spacing:.3px;
+  }
+  .section-title{
+    font-family:'Kanit',sans-serif;font-size:18px;font-weight:800;color:var(--dark);
+  }
+  .section-desc{font-size:12px;color:#aaa;font-weight:600;margin-top:2px;}
+
+  /* lesson card */
+  .lesson-card{
+    background:white;border-radius:22px;
+    padding:18px 20px;
+    box-shadow:0 4px 20px rgba(0,0,0,.08);
+    display:flex;align-items:center;gap:16px;
+    cursor:pointer;border:3px solid transparent;
+    text-decoration:none;color:inherit;
+    transition:transform .2s,box-shadow .2s,border-color .2s;
+  }
+  .lesson-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.12);}
+  .lesson-card:active{transform:scale(.98);}
+
+  .lc-icon{
+    width:64px;height:64px;border-radius:18px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:30px;flex-shrink:0;
+  }
+  .lc-body{flex:1;min-width:0;}
+  .lc-title{font-family:'Kanit',sans-serif;font-size:17px;font-weight:800;color:var(--dark);margin-bottom:2px;}
+  .lc-words{font-size:22px;font-weight:800;color:#555;line-height:1.3;}
+  .lc-count{font-size:11px;color:#aaa;font-weight:600;margin-top:3px;}
+  .lc-arrow{font-size:20px;color:#ccc;flex-shrink:0;}
+
+  /* special: ไม้หันอากาศ has kick badge */
+  .kick-badge{
+    display:inline-block;font-size:10px;font-weight:800;
+    background:var(--orange);color:white;
+    padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle;
+  }
+
+  /* footer note */
+  footer{
+    position:relative;z-index:1;
+    width:100%;max-width:520px;padding:0 20px 40px;
+  }
+  .footer-note{
+    background:white;border-radius:16px;padding:14px 18px;
+    box-shadow:0 2px 12px rgba(0,0,0,.06);
+    font-size:12px;color:#777;line-height:1.7;
+    border-left:4px solid var(--green);
+  }
+  .footer-note strong{color:var(--dark);}
+</style>
+</head>
+<body>
+<div class="bg-blob"></div>
+<div class="bg-blob"></div>
+<div class="bg-blob"></div>
+
+<header>
+  <div class="site-badge">🏫 Thai (DELTA)</div>
+  <div class="site-title">เรียนอ่านภาษาไทย</div>
+  <div class="site-sub">เลือกชุดสระที่ต้องการเรียน</div>
+</header>
+
+<main>
+
+  <!-- ── ไม้หันอากาศ ── -->
+  <div>
+    <div class="section-header">
+      <span class="section-pill" style="background:var(--pink);">ไม้หันอากาศ</span>
+      <div>
+        <div class="section-title">สระ อะ + ตัวสะกด</div>
+        <div class="section-desc">สระ -ะ เปลี่ยนรูปเมื่อมีตัวสะกด</div>
+      </div>
+    </div>
+    <a class="lesson-card" href="mai-han-lesson.html" style="border-color:var(--pink);">
+      <div class="lc-icon" style="background:#FFE4EF;font-size:52px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--pink);">ั</div>
+      <div class="lc-body">
+        <div class="lc-title">ไม้หันอากาศ <span class="kick-badge">👊 kick!</span></div>
+        <div class="lc-words">รัก · ตับ · ผัก · วัน</div>
+        <div class="lc-count">4 คำ · 5 ขั้นตอน</div>
+      </div>
+      <div class="lc-arrow">›</div>
+    </a>
+  </div>
+
+  <!-- ── สระ อา ── -->
+  <div>
+    <div class="section-header">
+      <span class="section-pill" style="background:var(--teal);">อา</span>
+      <div>
+        <div class="section-title">สระ อา</div>
+        <div class="section-desc">เขียนหลังพยัญชนะต้น</div>
+      </div>
+    </div>
+    <a class="lesson-card" href="sara-aa-lesson.html" style="border-color:var(--teal);">
+      <div class="lc-icon" style="background:#CCFBF1;font-size:52px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--teal);">า</div>
+      <div class="lc-body">
+        <div class="lc-title">สระ อา</div>
+        <div class="lc-words">ขาว · ชาม · ดาว · มาก</div>
+        <div class="lc-count">4 คำ · 5 ขั้นตอน</div>
+      </div>
+      <div class="lc-arrow">›</div>
+    </a>
+  </div>
+
+  <!-- ── สระ อิ / อี ── -->
+  <div>
+    <div class="section-header">
+      <span class="section-pill" style="background:var(--indigo);">อิ อี</span>
+      <div>
+        <div class="section-title">สระ อิ และ อี</div>
+        <div class="section-desc">เขียนเหนือพยัญชนะต้น</div>
+      </div>
+    </div>
+    <a class="lesson-card" href="sara-i-lesson.html" style="border-color:var(--indigo);">
+      <div class="lc-icon" style="background:#EEF2FF;font-size:42px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--indigo);">ิ ี</div>
+      <div class="lc-body">
+        <div class="lc-title">สระ อิ และ อี</div>
+        <div class="lc-words">หิน · บิน · ขีด · ฉีด</div>
+        <div class="lc-count">4 คำ · 5 ขั้นตอน</div>
+      </div>
+      <div class="lc-arrow">›</div>
+    </a>
+  </div>
+
+  <!-- ── สระ อุ / อู ── -->
+  <div>
+    <div class="section-header">
+      <span class="section-pill" style="background:var(--amber);">อุ อู</span>
+      <div>
+        <div class="section-title">สระ อุ และ อู</div>
+        <div class="section-desc">เขียนใต้พยัญชนะต้น</div>
+      </div>
+    </div>
+    <a class="lesson-card" href="sara-u-lesson.html" style="border-color:var(--amber);">
+      <div class="lc-icon" style="background:#FEF3C7;font-size:42px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--rust);">ุ ู</div>
+      <div class="lc-body">
+        <div class="lc-title">สระ อุ และ อู</div>
+        <div class="lc-words">พุง · ลุง · ถุง · สุก<br>พูด · ถูก · ปูน · ลูก</div>
+        <div class="lc-count">8 คำ · 5 ขั้นตอน</div>
+      </div>
+      <div class="lc-arrow">›</div>
+    </a>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-note">
+    <strong>📌 สำหรับครู</strong><br>
+    แต่ละชุดสอนสระหนึ่งประเภท ฝึกการอ่านแบบ phonics — พยัญชนะต้น + สระ + ตัวสะกด
+    แนะนำให้เรียนตามลำดับจากบนลงล่าง เริ่มจากไม้หันอากาศก่อน
+  </div>
+</footer>
+
+</body>
+</html>
