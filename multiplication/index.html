@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>สูตรคูณ แม่ 1–5</title>
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #FFF8F0;
+  --card:    #FFFFFF;
+  --t1: #FF6B6B; --t1l: #FFE5E5;
+  --t2: #FF9F43; --t2l: #FFF3E0;
+  --t3: #F9CA24; --t3l: #FFFDE7;
+  --t4: #6BCB77; --t4l: #E8F8EA;
+  --t5: #4D9FFF; --t5l: #E3F0FF;
+  --dark: #2C2C2C;
+  --mid:  #666;
+  --light:#AAA;
+  --radius: 20px;
+  --shadow: 0 4px 20px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  overflow-x: hidden;
+}
+
+/* ===== SCREENS ===== */
+.screen { display: none; min-height: 100vh; padding: 20px; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ===== TOP BAR ===== */
+.topbar {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px;
+}
+.topbar h2 {
+  font-size: clamp(20px, 5vw, 28px);
+  font-weight: 900;
+  flex: 1; text-align: center;
+}
+.btn-back {
+  background: white; border: 2px solid #eee;
+  border-radius: 50px; padding: 8px 18px;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  color: var(--mid); white-space: nowrap;
+  transition: .2s;
+}
+.btn-back:hover { border-color: var(--t2); color: var(--t2); }
+
+/* ===== HOME ===== */
+#home { align-items: center; justify-content: center; gap: 24px; }
+.home-title { text-align: center; }
+.home-title h1 {
+  font-size: clamp(32px, 8vw, 52px);
+  font-weight: 900; letter-spacing: -1px;
+  background: linear-gradient(135deg, #FF6B6B, #FF9F43, #F9CA24, #6BCB77, #4D9FFF);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.home-title p { color: var(--mid); font-size: 17px; margin-top: 6px; }
+
+.table-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; width: 100%; max-width: 500px;
+}
+.table-btn {
+  aspect-ratio: 1;
+  border: none; border-radius: 24px; cursor: pointer;
+  font-size: clamp(28px, 7vw, 44px); font-weight: 900;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 4px;
+  transition: transform .15s, box-shadow .15s;
+  box-shadow: var(--shadow);
+  color: white;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  position: relative; overflow: hidden;
+}
+.table-btn span.label { font-size: clamp(11px, 2.5vw, 14px); font-weight: 700; opacity: 0.9; }
+.table-btn:active { transform: scale(0.93); }
+.table-btn:nth-child(1) { background: linear-gradient(135deg, #FF6B6B, #ee5a24); }
+.table-btn:nth-child(2) { background: linear-gradient(135deg, #FF9F43, #e55039); }
+.table-btn:nth-child(3) { background: linear-gradient(135deg, #F9CA24, #f39c12); }
+.table-btn:nth-child(4) { background: linear-gradient(135deg, #6BCB77, #27ae60); }
+.table-btn:nth-child(5) { background: linear-gradient(135deg, #4D9FFF, #2980b9); }
+
+.mode-row {
+  display: flex; gap: 10px; width: 100%; max-width: 500px; flex-wrap: wrap;
+  justify-content: center;
+}
+.mode-btn {
+  flex: 1; min-width: 130px;
+  padding: 14px 10px; border: 3px solid #eee; border-radius: var(--radius);
+  background: white; cursor: pointer; font-size: 15px; font-weight: 700;
+  color: var(--dark); text-align: center; transition: .2s;
+  box-shadow: var(--shadow);
+}
+.mode-btn:hover { border-color: var(--t4); color: var(--t4); transform: translateY(-2px); }
+
+/* ===== LEARNING SCREEN ===== */
+#learn { max-width: 600px; margin: 0 auto; width: 100%; }
+
+.step-header {
+  text-align: center; margin-bottom: 16px;
+}
+.step-header .mae-title {
+  font-size: clamp(24px, 6vw, 36px); font-weight: 900;
+}
+.step-counter {
+  font-size: 14px; color: var(--mid); margin-top: 4px;
+}
+.progress-bar-wrap {
+  background: #eee; border-radius: 50px; height: 10px;
+  overflow: hidden; margin-bottom: 20px;
+}
+.progress-bar {
+  height: 100%; border-radius: 50px;
+  background: linear-gradient(90deg, var(--t4), var(--t5));
+  transition: width .4s ease;
+}
+
+.step-card {
+  background: white; border-radius: var(--radius);
+  padding: 24px 20px; box-shadow: var(--shadow-lg);
+  margin-bottom: 20px; text-align: center;
+}
+
+.repeat-add-label {
+  font-size: 14px; color: var(--mid); font-weight: 600;
+  margin-bottom: 12px; letter-spacing: .3px;
+}
+
+.groups-display {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  justify-content: center; margin-bottom: 16px;
+  min-height: 50px;
+}
+.group-box {
+  background: var(--bg); border: 2px solid #eee;
+  border-radius: 14px; padding: 8px 10px;
+  display: flex; flex-wrap: wrap; gap: 4px;
+  justify-content: center; align-items: center;
+  max-width: 120px;
+  animation: popIn .3s ease;
+}
+@keyframes popIn {
+  0%   { transform: scale(0.6); opacity: 0; }
+  70%  { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.icon { font-size: clamp(20px, 5vw, 28px); line-height: 1; }
+
+.addition-line {
+  font-size: clamp(16px, 4vw, 22px); font-weight: 700;
+  color: var(--mid); margin-bottom: 12px;
+  line-height: 1.6;
+}
+.addition-line .num { color: var(--dark); }
+.addition-line .eq  { color: var(--t4); font-size: 1.1em; }
+.addition-line .result { color: var(--t1); font-size: 1.2em; }
+
+.formula-line {
+  font-size: clamp(24px, 6vw, 38px); font-weight: 900;
+  color: var(--dark); margin-top: 8px;
+  letter-spacing: 1px;
+}
+.formula-line .times { color: var(--t2); }
+.formula-line .answer { color: var(--t1); }
+
+.word-line {
+  font-size: 14px; color: var(--mid); margin-top: 8px;
+  font-weight: 600;
+}
+
+.nav-btns {
+  display: flex; gap: 12px; justify-content: center; margin-top: 4px;
+}
+.btn-nav {
+  flex: 1; max-width: 180px;
+  padding: 16px; border: none; border-radius: var(--radius);
+  font-size: 18px; font-weight: 800; cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+  box-shadow: var(--shadow);
+}
+.btn-nav:active { transform: scale(0.95); }
+.btn-prev { background: #eee; color: var(--dark); }
+.btn-next { background: linear-gradient(135deg, var(--t4), #27ae60); color: white; }
+.btn-next:disabled { background: #ccc; cursor: not-allowed; }
+
+/* ===== PRACTICE SCREEN ===== */
+#practice { max-width: 560px; margin: 0 auto; width: 100%; }
+
+/* Table picker overlay inside practice */
+.table-picker {
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+  padding: 10px 0;
+}
+.table-picker p {
+  font-size: 18px; font-weight: 700; color: var(--mid); text-align: center;
+}
+.picker-grid {
+  display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+}
+.picker-btn {
+  width: 72px; height: 72px; border: none; border-radius: 18px;
+  font-size: 26px; font-weight: 900; color: white; cursor: pointer;
+  box-shadow: var(--shadow); transition: transform .15s;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px;
+}
+.picker-btn span { font-size: 11px; font-weight: 700; opacity: .9; }
+.picker-btn:active { transform: scale(0.9); }
+.picker-btn[data-t="1"] { background: linear-gradient(135deg,#FF6B6B,#ee5a24); }
+.picker-btn[data-t="2"] { background: linear-gradient(135deg,#FF9F43,#e55039); }
+.picker-btn[data-t="3"] { background: linear-gradient(135deg,#F9CA24,#f39c12); }
+.picker-btn[data-t="4"] { background: linear-gradient(135deg,#6BCB77,#27ae60); }
+.picker-btn[data-t="5"] { background: linear-gradient(135deg,#4D9FFF,#2980b9); }
+
+/* Practice question area */
+.prac-question-bar {
+  background: white; border-radius: var(--radius);
+  box-shadow: var(--shadow-lg); padding: 20px 24px;
+  text-align: center; margin-bottom: 14px;
+}
+.prac-formula {
+  font-size: clamp(32px, 9vw, 50px); font-weight: 900; letter-spacing: 2px;
+}
+.prac-formula .blank-ans {
+  display: inline-block; min-width: 64px;
+  border-bottom: 5px solid var(--t2); color: var(--t2); padding: 0 6px;
+}
+.prac-hint {
+  font-size: 14px; color: var(--mid); font-weight: 600; margin-top: 6px;
+}
+
+/* Counter badge */
+.count-badge {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  background: white; border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 14px 20px; margin-bottom: 14px;
+}
+.count-label { font-size: 16px; font-weight: 700; color: var(--mid); }
+.count-number {
+  font-size: clamp(36px, 10vw, 52px); font-weight: 900; color: var(--t1);
+  min-width: 70px; text-align: center;
+  transition: transform .1s;
+}
+.count-number.bump { animation: bump .15s ease; }
+@keyframes bump { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+.count-reset {
+  background: #eee; border: none; border-radius: 12px;
+  padding: 8px 14px; font-size: 14px; font-weight: 700;
+  cursor: pointer; color: var(--mid); transition: .15s;
+}
+.count-reset:active { transform: scale(.92); }
+
+/* Icon groups for tapping */
+.prac-groups {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  justify-content: center; margin-bottom: 16px;
+}
+.prac-group-box {
+  background: var(--bg); border: 2.5px solid #e0e0e0;
+  border-radius: 16px; padding: 10px 12px;
+  display: flex; flex-wrap: wrap; gap: 6px;
+  justify-content: center; align-items: center;
+  max-width: 130px;
+  transition: transform .12s, border-color .12s, background .12s;
+}
+.prac-group-box[style*="pointer"]:hover {
+  border-color: var(--t4); transform: scale(1.05);
+}
+.prac-group-box[style*="pointer"]:active {
+  transform: scale(0.93);
+}
+.prac-group-box.counted {
+  opacity: 0.45;
+  cursor: default !important;
+}
+.prac-group-box.counted::after {
+  content: '✓';
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 900;
+  color: #999;
+  margin-top: 4px;
+}
+.tap-icon {
+  font-size: clamp(26px, 7vw, 36px); line-height: 1;
+  cursor: pointer; display: inline-block;
+  transition: transform .12s, filter .12s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.tap-icon:active { transform: scale(0.85); }
+.tap-icon.counted {
+  filter: brightness(0.45) sepia(1) hue-rotate(80deg) saturate(4);
+  transform: scale(0.92);
+}
+
+/* feedback + next */
+.feedback-msg {
+  text-align: center; font-size: clamp(20px, 5vw, 28px); font-weight: 800;
+  min-height: 40px; margin-top: 4px;
+  transition: all .3s;
+}
+.msg-correct { color: var(--t4); }
+.msg-wrong   { color: var(--t2); }
+
+.next-q-btn {
+  display: none; width: 100%; margin-top: 12px;
+  padding: 16px; border: none; border-radius: var(--radius);
+  font-size: 18px; font-weight: 800; cursor: pointer;
+  background: linear-gradient(135deg, var(--t5), #2980b9); color: white;
+  box-shadow: var(--shadow);
+}
+
+/* shared action-row + btn-check/btn-clear (used by radd/quiz too) */
+.answer-display {
+  font-size: clamp(28px, 8vw, 44px); font-weight: 900;
+  min-height: 60px; text-align: center;
+  background: var(--bg); border-radius: 14px;
+  padding: 10px 20px; margin-bottom: 16px;
+  border: 3px solid #eee; color: var(--dark);
+  letter-spacing: 3px;
+}
+.numpad {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 10px; margin-bottom: 14px;
+}
+.num-btn {
+  padding: 18px 0; border: none; border-radius: 16px;
+  font-size: clamp(20px, 5vw, 28px); font-weight: 800;
+  background: white; color: var(--dark); cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform .1s, box-shadow .1s;
+  border: 3px solid #eee;
+}
+.num-btn:active { transform: scale(0.92); box-shadow: none; }
+.btn-zero { grid-column: span 3; }
+.action-row { display: flex; gap: 10px; }
+.btn-clear {
+  flex: 1; padding: 16px; border: none; border-radius: var(--radius);
+  font-size: 18px; font-weight: 800; cursor: pointer;
+  background: #eee; color: var(--dark);
+  box-shadow: var(--shadow); transition: .15s;
+}
+.btn-check {
+  flex: 2; padding: 16px; border: none; border-radius: var(--radius);
+  font-size: 18px; font-weight: 800; cursor: pointer;
+  background: linear-gradient(135deg, var(--t4), #27ae60); color: white;
+  box-shadow: var(--shadow); transition: .15s;
+}
+.btn-clear:active, .btn-check:active { transform: scale(0.95); }
+
+/* ===== REPEATED ADDITION PRACTICE ===== */
+#radd { max-width: 520px; margin: 0 auto; width: 100%; }
+
+.radd-card {
+  background: white; border-radius: var(--radius);
+  box-shadow: var(--shadow-lg); padding: 28px 20px;
+  text-align: center; margin-bottom: 16px;
+}
+.radd-eq {
+  font-size: clamp(20px, 5vw, 30px); font-weight: 800;
+  color: var(--mid); margin-bottom: 16px;
+  line-height: 1.8;
+}
+.radd-eq .num { color: var(--dark); }
+.radd-eq .blank-box {
+  display: inline-block; min-width: 60px;
+  border-bottom: 4px solid var(--t1);
+  color: var(--t1); padding: 0 6px;
+}
+
+/* ===== QUIZ SCREEN ===== */
+#quiz { max-width: 520px; margin: 0 auto; width: 100%; }
+
+.score-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  background: white; border-radius: var(--radius); padding: 14px 20px;
+  box-shadow: var(--shadow); margin-bottom: 16px; font-weight: 800;
+  font-size: 18px;
+}
+.score-num { color: var(--t4); font-size: 22px; }
+
+.quiz-card {
+  background: white; border-radius: var(--radius);
+  box-shadow: var(--shadow-lg); padding: 36px 24px;
+  text-align: center; margin-bottom: 16px;
+}
+.quiz-question {
+  font-size: clamp(40px, 10vw, 60px); font-weight: 900;
+  letter-spacing: 2px; margin-bottom: 8px;
+}
+
+/* ===== CELEBRATION ===== */
+.stars-burst {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 999; overflow: hidden;
+}
+.star-particle {
+  position: absolute; font-size: 28px;
+  animation: fallStar 1s ease forwards;
+}
+@keyframes fallStar {
+  0%   { transform: translateY(-20px) rotate(0deg) scale(0); opacity: 1; }
+  50%  { transform: translateY(30vh) rotate(180deg) scale(1.2); opacity: 1; }
+  100% { transform: translateY(70vh) rotate(360deg) scale(0.8); opacity: 0; }
+}
+
+/* ===== FINAL RESULT ===== */
+.result-card {
+  background: white; border-radius: var(--radius);
+  box-shadow: var(--shadow-lg); padding: 36px 24px;
+  text-align: center; margin-bottom: 16px;
+}
+.result-score {
+  font-size: clamp(48px, 12vw, 72px); font-weight: 900;
+  color: var(--t4);
+}
+.result-label { font-size: 20px; color: var(--mid); font-weight: 700; margin-top: 4px; }
+.result-emoji { font-size: 56px; margin-bottom: 8px; display: block; }
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 600px) {
+  .screen { padding: 28px; }
+  .table-grid { gap: 18px; }
+}
+@media (max-width: 380px) {
+  .groups-display { gap: 6px; }
+  .icon { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="stars-burst" id="starsBurst"></div>
+
+<!-- =============================== HOME =============================== -->
+<div class="screen active" id="home">
+  <div class="home-title">
+    <h1>สูตรคูณ ⭐</h1>
+    <p>เลือกแม่ที่อยากเรียน</p>
+  </div>
+
+  <div class="table-grid">
+    <button class="table-btn" onclick="selectTable(1)">
+      1 <span class="label">แม่ 1</span>
+    </button>
+    <button class="table-btn" onclick="selectTable(2)">
+      2 <span class="label">แม่ 2</span>
+    </button>
+    <button class="table-btn" onclick="selectTable(3)">
+      3 <span class="label">แม่ 3</span>
+    </button>
+    <button class="table-btn" onclick="selectTable(4)">
+      4 <span class="label">แม่ 4</span>
+    </button>
+    <button class="table-btn" onclick="selectTable(5)">
+      5 <span class="label">แม่ 5</span>
+    </button>
+  </div>
+
+  <div class="mode-row">
+    <button class="mode-btn" onclick="openMode('practice')">✏️ ฝึกคำนวณเอง</button>
+    <button class="mode-btn" onclick="openMode('radd')">➕ บวกซ้ำ</button>
+    <button class="mode-btn" onclick="openMode('quiz')">🎯 แบบสุ่ม</button>
+  </div>
+</div>
+
+<!-- =============================== LEARN =============================== -->
+<div class="screen" id="learn">
+  <div class="topbar">
+    <button class="btn-back" onclick="goHome()">← หน้าแรก</button>
+    <h2 id="learnTitle">แม่ 2</h2>
+  </div>
+
+  <div class="step-header">
+    <div class="step-counter" id="stepCounter">ขั้นที่ 1 / 12</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progressBar" style="width:8%"></div>
+    </div>
+  </div>
+
+  <div class="step-card" id="stepCard">
+    <!-- filled by JS -->
+  </div>
+
+  <div class="nav-btns">
+    <button class="btn-nav btn-prev" id="btnPrev" onclick="stepBack()">◀ ย้อนกลับ</button>
+    <button class="btn-nav btn-next" id="btnNext" onclick="stepForward()">ถัดไป ▶</button>
+  </div>
+</div>
+
+<!-- =============================== PRACTICE =============================== -->
+<div class="screen" id="practice">
+  <div class="topbar">
+    <button class="btn-back" onclick="goHome()">← หน้าแรก</button>
+    <h2 id="pracTitle">ฝึกคำนวณเอง</h2>
+  </div>
+
+  <!-- Step 1: Table picker -->
+  <div id="pracPicker">
+    <div class="table-picker">
+      <p>ครูเลือกแม่ที่จะฝึกวันนี้ 👇</p>
+      <div class="picker-grid">
+        <button class="picker-btn" data-t="1" onclick="pracPickTable(1)">1<span>แม่ 1</span></button>
+        <button class="picker-btn" data-t="2" onclick="pracPickTable(2)">2<span>แม่ 2</span></button>
+        <button class="picker-btn" data-t="3" onclick="pracPickTable(3)">3<span>แม่ 3</span></button>
+        <button class="picker-btn" data-t="4" onclick="pracPickTable(4)">4<span>แม่ 4</span></button>
+        <button class="picker-btn" data-t="5" onclick="pracPickTable(5)">5<span>แม่ 5</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Counting practice -->
+  <div id="pracMain" style="display:none;">
+
+    <!-- formula bar -->
+    <div class="prac-question-bar">
+      <div class="prac-formula" id="pracFormula"></div>
+      <div class="prac-hint">แตะแต่ละตัวเพื่อนับ 👆</div>
+    </div>
+
+    <!-- live counter -->
+    <div class="count-badge">
+      <div class="count-label">นับได้</div>
+      <div class="count-number" id="pracCount">0</div>
+      <div class="count-label">ตัว</div>
+      <button class="count-reset" onclick="pracResetCount()">เริ่มใหม่</button>
+    </div>
+
+    <!-- tappable icon groups -->
+    <div class="prac-groups" id="pracGroups"></div>
+
+    <div class="feedback-msg" id="practiceFb"></div>
+    <button class="next-q-btn" id="practiceNextBtn" onclick="newPracticeQ()">โจทย์ถัดไป ▶</button>
+
+  </div>
+</div>
+
+<!-- =============================== REPEATED ADDITION =============================== -->
+<div class="screen" id="radd">
+  <div class="topbar">
+    <button class="btn-back" onclick="goHome()">← หน้าแรก</button>
+    <h2>บวกซ้ำ ➕</h2>
+  </div>
+
+  <div class="radd-card">
+    <div class="question-text" id="raddQ"></div>
+    <div style="height:16px"></div>
+    <div class="radd-eq" id="raddEq"></div>
+  </div>
+
+  <div class="answer-display" id="raddAns">?</div>
+
+  <div class="numpad">
+    <button class="num-btn" onclick="raddNum(1)">1</button>
+    <button class="num-btn" onclick="raddNum(2)">2</button>
+    <button class="num-btn" onclick="raddNum(3)">3</button>
+    <button class="num-btn" onclick="raddNum(4)">4</button>
+    <button class="num-btn" onclick="raddNum(5)">5</button>
+    <button class="num-btn" onclick="raddNum(6)">6</button>
+    <button class="num-btn" onclick="raddNum(7)">7</button>
+    <button class="num-btn" onclick="raddNum(8)">8</button>
+    <button class="num-btn" onclick="raddNum(9)">9</button>
+    <button class="num-btn btn-zero" onclick="raddNum(0)">0</button>
+  </div>
+  <div class="action-row">
+    <button class="btn-clear" onclick="raddClear()">ลบ ✕</button>
+    <button class="btn-check" onclick="checkRadd()">ตรวจ ✓</button>
+  </div>
+  <div class="feedback-msg" id="raddFb"></div>
+  <button class="next-q-btn" id="raddNextBtn" onclick="newRaddQ()">ข้อถัดไป ▶</button>
+</div>
+
+<!-- =============================== QUIZ =============================== -->
+<div class="screen" id="quiz">
+  <div class="topbar">
+    <button class="btn-back" onclick="goHome()">← หน้าแรก</button>
+    <h2>แบบสุ่ม 🎯</h2>
+  </div>
+
+  <div id="quizMain">
+    <div class="score-bar">
+      <span>คะแนน</span>
+      <span class="score-num" id="scoreDisplay">0 / 10</span>
+      <span id="quizQNum">ข้อที่ 1</span>
+    </div>
+
+    <div class="quiz-card">
+      <div class="quiz-question" id="quizQ"></div>
+    </div>
+
+    <div class="answer-display" id="quizAns">?</div>
+
+    <div class="numpad">
+      <button class="num-btn" onclick="quizNum(1)">1</button>
+      <button class="num-btn" onclick="quizNum(2)">2</button>
+      <button class="num-btn" onclick="quizNum(3)">3</button>
+      <button class="num-btn" onclick="quizNum(4)">4</button>
+      <button class="num-btn" onclick="quizNum(5)">5</button>
+      <button class="num-btn" onclick="quizNum(6)">6</button>
+      <button class="num-btn" onclick="quizNum(7)">7</button>
+      <button class="num-btn" onclick="quizNum(8)">8</button>
+      <button class="num-btn" onclick="quizNum(9)">9</button>
+      <button class="num-btn btn-zero" onclick="quizNum(0)">0</button>
+    </div>
+    <div class="action-row">
+      <button class="btn-clear" onclick="quizClear()">ลบ ✕</button>
+      <button class="btn-check" onclick="checkQuiz()">ตรวจ ✓</button>
+    </div>
+    <div class="feedback-msg" id="quizFb"></div>
+    <button class="next-q-btn" id="quizNextBtn" onclick="nextQuizQ()">ข้อถัดไป ▶</button>
+  </div>
+
+  <div id="quizResult" style="display:none;">
+    <div class="result-card">
+      <span class="result-emoji" id="resultEmoji">🎉</span>
+      <div class="result-score" id="resultScore">8/10</div>
+      <div class="result-label" id="resultLabel">เก่งมากเลย!</div>
+    </div>
+    <button class="btn-check" style="width:100%;padding:18px;font-size:20px;" onclick="restartQuiz()">เล่นอีกครั้ง 🔄</button>
+  </div>
+</div>
+
+<script>
+// =====================================================
+// CONFIG
+// =====================================================
+const ICONS = ['⭐','🍎','🌸','🎈','🍭','🐥','🦋','🍊','🌺','💎'];
+let currentIcon = '⭐';
+
+function pickIcon(tableNum) {
+  const map = {1:'⭐', 2:'🍎', 3:'🌸', 4:'🎈', 5:'🍭'};
+  return map[tableNum] || '⭐';
+}
+
+// =====================================================
+// SCREEN MANAGEMENT
+// =====================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goHome() { showScreen('home'); }
+
+// =====================================================
+// HOME — SELECT TABLE
+// =====================================================
+let currentTable = 2;
+
+function selectTable(n) {
+  currentTable = n;
+  currentIcon  = pickIcon(n);
+  initLearn(n);
+  showScreen('learn');
+}
+
+function openMode(mode) {
+  if (mode === 'practice') { showScreen('practice'); initPractice(); }
+  if (mode === 'radd')     { showScreen('radd');     initRadd(); }
+  if (mode === 'quiz')     { showScreen('quiz');     initQuiz(); }
+}
+
+// =====================================================
+// LEARN — STEP BY STEP
+// =====================================================
+let learnTable = 2;
+let learnStep  = 0; // 0-indexed, 0 = 1×table
+
+function initLearn(n) {
+  learnTable = n;
+  learnStep  = 0;
+  currentIcon = pickIcon(n);
+  document.getElementById('learnTitle').textContent = `แม่ ${n}`;
+  renderStep();
+}
+
+function renderStep() {
+  const n    = learnTable;
+  const step = learnStep + 1; // 1..12
+  const total = 12;
+  const result = n * step;
+
+  // Progress
+  document.getElementById('stepCounter').textContent = `ขั้นที่ ${step} / ${total}`;
+  document.getElementById('progressBar').style.width = `${(step/total)*100}%`;
+
+  // Build addition string: n + n + n ... = result
+  const addParts = [];
+  for (let i = 0; i < step; i++) addParts.push(n);
+  const addStr = addParts.join(' + ');
+
+  // Build groups of icons
+  let groupsHTML = '';
+  for (let g = 0; g < step; g++) {
+    let iconsHTML = '';
+    for (let i = 0; i < n; i++) iconsHTML += `<span class="icon">${currentIcon}</span>`;
+    groupsHTML += `<div class="group-box" style="animation-delay:${g*0.06}s">${iconsHTML}</div>`;
+  }
+
+  // Word description
+  const wordLine = `${n} ตัว × ${step} ครั้ง = ${result} ตัว`;
+
+  // Formula
+  const formulaHTML = `<span>${n}</span> <span class="times">×</span> <span>${step}</span> <span class="times">=</span> <span class="answer">${result}</span>`;
+
+  // Addition line
+  let addLineHTML = '';
+  if (step === 1) {
+    addLineHTML = `<span class="num">${n}</span> <span class="eq">=</span> <span class="result">${result}</span>`;
+  } else {
+    addLineHTML = `<span class="num">${addStr}</span> <span class="eq">=</span> <span class="result">${result}</span>`;
+  }
+
+  document.getElementById('stepCard').innerHTML = `
+    <div class="repeat-add-label">ครั้งที่ ${step}</div>
+    <div class="groups-display">${groupsHTML}</div>
+    <div class="addition-line">${addLineHTML}</div>
+    <div class="formula-line">${formulaHTML}</div>
+    <div class="word-line">${wordLine}</div>
+  `;
+
+  // Buttons
+  document.getElementById('btnPrev').disabled = (learnStep === 0);
+  const nextBtn = document.getElementById('btnNext');
+  if (learnStep === total - 1) {
+    nextBtn.textContent = '🎉 จบแล้ว!';
+    nextBtn.style.background = 'linear-gradient(135deg,#F9CA24,#f39c12)';
+  } else {
+    nextBtn.textContent = 'ถัดไป ▶';
+    nextBtn.style.background = '';
+  }
+}
+
+function stepForward() {
+  if (learnStep < 11) { learnStep++; renderStep(); }
+  else { celebrate(); setTimeout(goHome, 1200); }
+}
+function stepBack() {
+  if (learnStep > 0) { learnStep--; renderStep(); }
+}
+
+// =====================================================
+// PRACTICE — TAP TO COUNT
+// =====================================================
+let practiceTable = 2;
+let practiceA = 2, practiceB = 3;
+let pracTapCount = 0;
+let pracDone = false;
+
+function initPractice() {
+  document.getElementById('pracPicker').style.display = '';
+  document.getElementById('pracMain').style.display   = 'none';
+  document.getElementById('pracTitle').textContent    = 'ฝึกคำนวณเอง';
+}
+
+function pracPickTable(n) {
+  practiceTable = n;
+  document.getElementById('pracPicker').style.display = 'none';
+  document.getElementById('pracMain').style.display   = '';
+  document.getElementById('pracTitle').textContent    = `ฝึกแม่ ${n}`;
+  newPracticeQ();
+}
+
+function newPracticeQ() {
+  practiceA = practiceTable;
+  practiceB = Math.floor(Math.random() * 12) + 1;
+  pracTapCount = 0;
+  pracDone     = false;
+
+  // Formula bar: show "A × B = ?"
+  document.getElementById('pracFormula').innerHTML =
+    `<span>${practiceA}</span>`+
+    `<span style="color:var(--t2);margin:0 8px">×</span>`+
+    `<span>${practiceB}</span>`+
+    `<span style="color:var(--t2);margin:0 8px">=</span>`+
+    `<span class="blank-ans" id="pracAnswer">?</span>`;
+
+  // Counter reset
+  const countEl = document.getElementById('pracCount');
+  countEl.textContent = '0';
+  countEl.style.color = 'var(--t1)';
+
+  // Clear feedback
+  document.getElementById('practiceFb').textContent = '';
+  document.getElementById('practiceFb').className = 'feedback-msg';
+  document.getElementById('practiceNextBtn').style.display = 'none';
+
+  // Build icon groups
+  renderPracGroups();
+}
+
+function renderPracGroups() {
+  const icon   = pickIcon(practiceA);
+  const total  = practiceA * practiceB;
+  const groups = document.getElementById('pracGroups');
+  groups.innerHTML = '';
+
+  // Always show 12 groups; first practiceB are "active", rest are dimmed/locked
+  for (let g = 0; g < 12; g++) {
+    const box = document.createElement('div');
+    box.className = 'prac-group-box';
+    box.dataset.groupIdx = g;
+
+    // Icons inside
+    for (let i = 0; i < practiceA; i++) {
+      const span = document.createElement('span');
+      span.className = 'tap-icon';
+      span.textContent = icon;
+      box.appendChild(span);
+    }
+
+    if (g < practiceB) {
+      // Active group — tappable
+      box.style.cursor = 'pointer';
+      box.addEventListener('click', function() { tapGroup(this, total); });
+    } else {
+      // Locked group — greyed out, not tappable
+      box.style.opacity = '0.25';
+      box.style.cursor  = 'default';
+      box.style.filter  = 'grayscale(1)';
+    }
+
+    groups.appendChild(box);
+  }
+}
+
+function tapGroup(box, total) {
+  if (pracDone) return;
+  if (box.classList.contains('counted')) return;
+
+  box.classList.add('counted');
+
+  pracTapCount += practiceA;
+
+  // Bump counter
+  const countEl = document.getElementById('pracCount');
+  countEl.textContent = pracTapCount;
+  countEl.classList.remove('bump');
+  void countEl.offsetWidth;
+  countEl.classList.add('bump');
+
+  // Update the blank in formula
+  const ansEl = document.getElementById('pracAnswer');
+  if (ansEl) ansEl.textContent = pracTapCount;
+
+  // Check if all active groups tapped
+  if (pracTapCount >= total) {
+    pracDone = true;
+    countEl.style.color = 'var(--t4)';
+    const fb = document.getElementById('practiceFb');
+    fb.textContent = `🌟 เก่งมาก! ${practiceA} × ${practiceB} = ${total}`;
+    fb.className = 'feedback-msg msg-correct';
+    if (ansEl) { ansEl.textContent = pracTapCount; }
+    celebrate();
+    document.getElementById('practiceNextBtn').style.display = 'block';
+  }
+}
+
+function pracResetCount() {
+  if (pracDone) return;
+  pracTapCount = 0;
+  document.getElementById('pracCount').textContent = '0';
+  document.getElementById('pracCount').style.color = 'var(--t1)';
+  const ansEl = document.getElementById('pracAnswer');
+  if (ansEl) { ansEl.textContent = '?'; ansEl.style.borderColor = ''; ansEl.style.color = ''; }
+  // Reset all group boxes
+  document.querySelectorAll('.prac-group-box.counted').forEach(box => {
+    box.classList.remove('counted');
+    box.querySelectorAll('.tap-icon').forEach(el => el.classList.remove('counted'));
+  });
+  document.getElementById('practiceFb').textContent = '';
+  document.getElementById('practiceFb').className = 'feedback-msg';
+  document.getElementById('practiceNextBtn').style.display = 'none';
+}
+
+// =====================================================
+// REPEATED ADDITION PRACTICE
+// =====================================================
+let raddA = 2, raddB = 3;
+let raddInput = '';
+
+function initRadd() { newRaddQ(); }
+
+function newRaddQ() {
+  raddA = Math.floor(Math.random()*5)+1;
+  raddB = Math.floor(Math.random()*12)+1;
+  raddInput = '';
+  document.getElementById('raddAns').textContent = '?';
+  document.getElementById('raddFb').textContent = '';
+  document.getElementById('raddFb').className = 'feedback-msg';
+  document.getElementById('raddNextBtn').style.display = 'none';
+
+  document.getElementById('raddQ').innerHTML =
+    `<span>${raddA}</span> <span style="color:var(--t2)">×</span> <span>${raddB}</span> <span style="color:var(--t2)">=</span> <span class="blank">&nbsp;&nbsp;&nbsp;</span>`;
+
+  // Build addition equation
+  const parts = [];
+  for (let i = 0; i < raddB; i++) parts.push(raddA);
+  const addStr = parts.join(' + ');
+  document.getElementById('raddEq').innerHTML =
+    `<span class="num">${addStr}</span> = <span class="blank-box">&nbsp;&nbsp;&nbsp;</span>`;
+}
+
+function raddNum(n) {
+  if (raddInput.length >= 3) return;
+  raddInput += n;
+  document.getElementById('raddAns').textContent = raddInput;
+}
+function raddClear() {
+  raddInput = raddInput.slice(0,-1);
+  document.getElementById('raddAns').textContent = raddInput || '?';
+}
+function checkRadd() {
+  if (!raddInput) return;
+  const correct = raddA * raddB;
+  const fb = document.getElementById('raddFb');
+  if (parseInt(raddInput) === correct) {
+    fb.textContent = '🌟 ถูกต้อง! เก่งมาก!';
+    fb.className = 'feedback-msg msg-correct';
+    celebrate();
+  } else {
+    fb.textContent = `🤗 ลองอีกครั้งนะ (เฉลย: ${correct})`;
+    fb.className = 'feedback-msg msg-wrong';
+    raddInput = '';
+    document.getElementById('raddAns').textContent = '?';
+  }
+  document.getElementById('raddNextBtn').style.display = 'block';
+}
+
+// =====================================================
+// QUIZ
+// =====================================================
+const QUIZ_TOTAL = 10;
+let quizQ = 0, quizScore = 0;
+let quizA = 1, quizB = 1;
+let quizInput = '';
+let quizDone = false;
+
+function initQuiz() {
+  quizQ = 0; quizScore = 0; quizDone = false;
+  document.getElementById('quizMain').style.display = '';
+  document.getElementById('quizResult').style.display = 'none';
+  newQuizQuestion();
+}
+function restartQuiz() { initQuiz(); }
+
+function newQuizQuestion() {
+  quizA = Math.floor(Math.random()*5)+1;
+  quizB = Math.floor(Math.random()*12)+1;
+  quizInput = '';
+  document.getElementById('quizAns').textContent = '?';
+  document.getElementById('quizFb').textContent = '';
+  document.getElementById('quizFb').className = 'feedback-msg';
+  document.getElementById('quizNextBtn').style.display = 'none';
+  document.getElementById('quizQNum').textContent = `ข้อที่ ${quizQ+1}`;
+  document.getElementById('scoreDisplay').textContent = `${quizScore} / ${QUIZ_TOTAL}`;
+  document.getElementById('quizQ').innerHTML =
+    `<span>${quizA}</span><span style="color:var(--t2);margin:0 10px">×</span><span>${quizB}</span><span style="color:var(--t2);margin:0 10px">=</span><span style="color:var(--t1)">?</span>`;
+}
+
+function quizNum(n) {
+  if (quizDone || quizInput.length >= 3) return;
+  quizInput += n;
+  document.getElementById('quizAns').textContent = quizInput;
+}
+function quizClear() {
+  quizInput = quizInput.slice(0,-1);
+  document.getElementById('quizAns').textContent = quizInput || '?';
+}
+function checkQuiz() {
+  if (!quizInput || quizDone) return;
+  const correct = quizA * quizB;
+  const fb = document.getElementById('quizFb');
+  if (parseInt(quizInput) === correct) {
+    quizScore++;
+    fb.textContent = '🌟 ถูกต้อง!';
+    fb.className = 'feedback-msg msg-correct';
+    celebrate();
+  } else {
+    fb.textContent = `🤗 ลองใหม่นะ (เฉลย: ${correct})`;
+    fb.className = 'feedback-msg msg-wrong';
+  }
+  document.getElementById('scoreDisplay').textContent = `${quizScore} / ${QUIZ_TOTAL}`;
+  quizQ++;
+
+  if (quizQ >= QUIZ_TOTAL) {
+    setTimeout(showQuizResult, 900);
+  } else {
+    document.getElementById('quizNextBtn').style.display = 'block';
+  }
+}
+function nextQuizQ() { newQuizQuestion(); }
+
+function showQuizResult() {
+  document.getElementById('quizMain').style.display = 'none';
+  document.getElementById('quizResult').style.display = '';
+  const pct = quizScore / QUIZ_TOTAL;
+  let emoji = '🎉', label = 'เก่งมากเลย!';
+  if (pct < 0.5) { emoji = '💪'; label = 'ฝึกอีกนิดนะ ไม่ยอมแพ้!'; }
+  else if (pct < 0.8) { emoji = '😊'; label = 'ดีมาก! ไปได้เลย!'; }
+  else if (pct === 1) { emoji = '🏆'; label = 'เพอร์เฟกต์! เก่งสุด!'; }
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultScore').textContent = `${quizScore}/${QUIZ_TOTAL}`;
+  document.getElementById('resultLabel').textContent = label;
+  celebrate();
+}
+
+// =====================================================
+// CELEBRATION
+// =====================================================
+function celebrate() {
+  const burst = document.getElementById('starsBurst');
+  burst.innerHTML = '';
+  const emojis = ['⭐','🌟','✨','🎉','🍎','🌸'];
+  for (let i = 0; i < 14; i++) {
+    const s = document.createElement('span');
+    s.className = 'star-particle';
+    s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    s.style.left   = Math.random()*100 + 'vw';
+    s.style.top    = '-30px';
+    s.style.animationDelay = (Math.random()*0.5) + 's';
+    s.style.fontSize = (20 + Math.random()*20) + 'px';
+    burst.appendChild(s);
+  }
+  setTimeout(() => burst.innerHTML = '', 1800);
+}
+
+// =====================================================
+// INIT + HASH DEEP-LINK (from index page)
+// =====================================================
+initRadd();
+initQuiz();
+
+// Check if we arrived with a hash like #learn-2, #practice, #quiz, #radd
+(function() {
+  const hash = window.location.hash.replace('#','');
+  if (!hash) return;
+  if (hash.startsWith('learn-')) {
+    const n = parseInt(hash.split('-')[1]);
+    if (n >= 1 && n <= 5) { selectTable(n); return; }
+  }
+  if (hash === 'practice') { showScreen('practice'); initPractice(); return; }
+  if (hash === 'radd')     { showScreen('radd');     initRadd();     return; }
+  if (hash === 'quiz')     { showScreen('quiz');     initQuiz();     return; }
+})();
+</script>
+</body>
+</html>
