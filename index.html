@@ -3,142 +3,275 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>เรียนอ่านภาษาไทย</title>
+<title>เรียนรู้กับปาง</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;800&family=Kanit:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --cream:#FFF9F0;
-    --pink:#FF6B9D; --green:#4CAF50; --blue:#4ECDC4;
-    --yellow:#FFD93D; --orange:#FF8C42; --purple:#A78BFA;
-    --indigo:#6366F1; --teal:#0D9488; --amber:#F59E0B; --rust:#DC6B19;
-    --dark:#2D2D2D;
+  :root {
+    --cream: #FFF9F0;
+    --pink:   #FF6B9D;
+    --green:  #4CAF50;
+    --blue:   #4ECDC4;
+    --yellow: #FFD93D;
+    --orange: #FF8C42;
+    --purple: #A78BFA;
+    --indigo: #6366F1;
+    --teal:   #0D9488;
+    --amber:  #F59E0B;
+    --rust:   #DC6B19;
+    --t1: #FF6B6B;
+    --t2: #FF9F43;
+    --t3: #F9CA24;
+    --t4: #6BCB77;
+    --t5: #4D9FFF;
+    --dark: #2D2D2D;
   }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{
-    font-family:'Sarabun',sans-serif;
-    background:var(--cream);
-    min-height:100vh;
-    display:flex;flex-direction:column;align-items:center;
-    overflow-x:hidden;position:relative;
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    overflow-x: hidden; position: relative;
   }
 
-  /* blobs */
-  .bg-blob{position:fixed;border-radius:50%;opacity:.10;animation:bfloat 7s ease-in-out infinite;pointer-events:none;z-index:0;}
-  .bg-blob:nth-child(1){width:300px;height:300px;background:var(--pink);top:-80px;left:-80px;animation-delay:0s;}
-  .bg-blob:nth-child(2){width:200px;height:200px;background:var(--blue);bottom:60px;right:-60px;animation-delay:2.5s;}
-  .bg-blob:nth-child(3){width:150px;height:150px;background:var(--yellow);top:45%;left:-50px;animation-delay:5s;}
-  @keyframes bfloat{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-24px) rotate(6deg);}}
-
-  /* header */
-  header{
-    position:relative;z-index:1;
-    width:100%;max-width:520px;
-    text-align:center;
-    padding:40px 24px 20px;
+  /* ── blobs ── */
+  .bg-blob {
+    position: fixed; border-radius: 50%; opacity: .09;
+    animation: bfloat 7s ease-in-out infinite; pointer-events: none; z-index: 0;
   }
-  .site-badge{
-    display:inline-block;
-    background:var(--pink);color:white;
-    font-size:13px;font-weight:800;
-    padding:5px 18px;border-radius:20px;
-    letter-spacing:.5px;margin-bottom:14px;
-  }
-  .site-title{
-    font-family:'Kanit',sans-serif;font-size:32px;font-weight:800;
-    color:var(--dark);line-height:1.2;margin-bottom:6px;
-  }
-  .site-sub{font-size:14px;color:#999;font-weight:600;}
-
-  /* main content */
-  main{
-    position:relative;z-index:1;
-    width:100%;max-width:520px;
-    padding:0 20px 60px;
-    display:flex;flex-direction:column;gap:28px;
+  .bg-blob:nth-child(1) { width:320px;height:320px;background:var(--pink);  top:-90px;left:-90px;  animation-delay:0s; }
+  .bg-blob:nth-child(2) { width:220px;height:220px;background:var(--blue);  bottom:60px;right:-60px; animation-delay:2.5s; }
+  .bg-blob:nth-child(3) { width:160px;height:160px;background:var(--yellow);top:42%;left:-50px;   animation-delay:5s; }
+  .bg-blob:nth-child(4) { width:180px;height:180px;background:var(--t4);    bottom:30%;right:-50px; animation-delay:3.5s; }
+  @keyframes bfloat {
+    0%,100% { transform: translateY(0) rotate(0); }
+    50%      { transform: translateY(-22px) rotate(5deg); }
   }
 
-  /* section */
-  .section-header{
-    display:flex;align-items:center;gap:10px;margin-bottom:12px;
+  /* ── header ── */
+  header {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 560px;
+    text-align: center;
+    padding: 44px 24px 18px;
   }
-  .section-pill{
-    font-size:12px;font-weight:800;padding:4px 14px;
-    border-radius:20px;color:white;white-space:nowrap;letter-spacing:.3px;
+  .site-badge {
+    display: inline-block;
+    background: var(--pink); color: white;
+    font-size: 13px; font-weight: 800;
+    padding: 5px 18px; border-radius: 20px;
+    letter-spacing: .5px; margin-bottom: 14px;
   }
-  .section-title{
-    font-family:'Kanit',sans-serif;font-size:18px;font-weight:800;color:var(--dark);
+  .site-title {
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(26px, 7vw, 36px);
+    font-weight: 800; color: var(--dark);
+    line-height: 1.2; margin-bottom: 6px;
   }
-  .section-desc{font-size:12px;color:#aaa;font-weight:600;margin-top:2px;}
+  .site-sub { font-size: 14px; color: #999; font-weight: 600; }
 
-  /* lesson card */
-  .lesson-card{
-    background:white;border-radius:22px;
-    padding:18px 20px;
-    box-shadow:0 4px 20px rgba(0,0,0,.08);
-    display:flex;align-items:center;gap:16px;
-    cursor:pointer;border:3px solid transparent;
-    text-decoration:none;color:inherit;
-    transition:transform .2s,box-shadow .2s,border-color .2s;
-  }
-  .lesson-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.12);}
-  .lesson-card:active{transform:scale(.98);}
-
-  .lc-icon{
-    width:64px;height:64px;border-radius:18px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:30px;flex-shrink:0;
-  }
-  .lc-body{flex:1;min-width:0;}
-  .lc-title{font-family:'Kanit',sans-serif;font-size:17px;font-weight:800;color:var(--dark);margin-bottom:2px;}
-  .lc-words{font-size:22px;font-weight:800;color:#555;line-height:1.3;}
-  .lc-count{font-size:11px;color:#aaa;font-weight:600;margin-top:3px;}
-  .lc-arrow{font-size:20px;color:#ccc;flex-shrink:0;}
-
-  /* special: ไม้หันอากาศ has kick badge */
-  .kick-badge{
-    display:inline-block;font-size:10px;font-weight:800;
-    background:var(--orange);color:white;
-    padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle;
+  /* ── main ── */
+  main {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 560px;
+    padding: 0 20px 60px;
+    display: flex; flex-direction: column; gap: 32px;
   }
 
-  /* footer note */
-  footer{
-    position:relative;z-index:1;
-    width:100%;max-width:520px;padding:0 20px 40px;
+  /* ── subject divider ── */
+  .subject-block { display: flex; flex-direction: column; gap: 10px; }
+
+  .subject-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px;
+    border-radius: 18px;
+    margin-bottom: 4px;
   }
-  .footer-note{
-    background:white;border-radius:16px;padding:14px 18px;
-    box-shadow:0 2px 12px rgba(0,0,0,.06);
-    font-size:12px;color:#777;line-height:1.7;
-    border-left:4px solid var(--green);
+  .subject-emoji { font-size: 28px; line-height: 1; }
+  .subject-title {
+    font-family: 'Kanit', sans-serif;
+    font-size: 20px; font-weight: 800; color: var(--dark);
   }
-  .footer-note strong{color:var(--dark);}
+  .subject-sub { font-size: 12px; font-weight: 600; margin-top: 1px; }
+
+  /* math header */
+  .sh-math { background: linear-gradient(135deg,#FFF3E0,#FFF8F0); border: 2px solid #FFE0B2; }
+  .sh-math .subject-sub { color: var(--t2); }
+
+  /* thai header */
+  .sh-thai { background: linear-gradient(135deg,#FCE4EC,#FFF9F0); border: 2px solid #F8BBD0; }
+  .sh-thai .subject-sub { color: var(--pink); }
+
+  /* ── lesson card ── */
+  .lesson-card {
+    background: white; border-radius: 20px;
+    padding: 16px 18px;
+    box-shadow: 0 3px 16px rgba(0,0,0,.07);
+    display: flex; align-items: center; gap: 14px;
+    cursor: pointer; border: 2.5px solid transparent;
+    text-decoration: none; color: inherit;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+  }
+  .lesson-card:hover  { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+  .lesson-card:active { transform: scale(.97); }
+
+  .lc-icon {
+    width: 60px; height: 60px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; flex-shrink: 0;
+  }
+  .lc-body  { flex: 1; min-width: 0; }
+  .lc-title {
+    font-family: 'Kanit', sans-serif;
+    font-size: 16px; font-weight: 800; color: var(--dark);
+    margin-bottom: 2px;
+  }
+  .lc-words { font-size: 20px; font-weight: 800; color: #555; line-height: 1.4; }
+  .lc-count { font-size: 11px; color: #bbb; font-weight: 600; margin-top: 3px; }
+  .lc-arrow { font-size: 20px; color: #ccc; flex-shrink: 0; }
+
+  .kick-badge {
+    display: inline-block; font-size: 10px; font-weight: 800;
+    background: var(--orange); color: white;
+    padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle;
+  }
+
+  /* ── math table buttons row ── */
+  .math-tables {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  .tbl-btn {
+    aspect-ratio: 1;
+    border: none; border-radius: 16px; cursor: pointer;
+    font-size: clamp(20px, 5vw, 28px); font-weight: 900;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2px;
+    color: white; box-shadow: 0 3px 12px rgba(0,0,0,.13);
+    transition: transform .15s; text-shadow: 0 1px 4px rgba(0,0,0,.2);
+  }
+  .tbl-btn span { font-size: 10px; font-weight: 700; opacity: .9; }
+  .tbl-btn:active { transform: scale(.91); }
+  .tbl-btn:nth-child(1) { background: linear-gradient(135deg,#FF6B6B,#ee5a24); }
+  .tbl-btn:nth-child(2) { background: linear-gradient(135deg,#FF9F43,#e55039); }
+  .tbl-btn:nth-child(3) { background: linear-gradient(135deg,#F9CA24,#f39c12); }
+  .tbl-btn:nth-child(4) { background: linear-gradient(135deg,#6BCB77,#27ae60); }
+  .tbl-btn:nth-child(5) { background: linear-gradient(135deg,#4D9FFF,#2980b9); }
+
+  .math-modes {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .mode-chip {
+    flex: 1; min-width: 110px;
+    padding: 12px 8px; border: 2.5px solid #eee; border-radius: 16px;
+    background: white; cursor: pointer;
+    font-family: 'Sarabun', sans-serif;
+    font-size: 14px; font-weight: 700; color: var(--dark);
+    text-align: center; transition: .2s;
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  }
+  .mode-chip:hover { border-color: var(--t4); color: var(--t4); transform: translateY(-2px); }
+
+  /* ── math mini card ── */
+  .math-card {
+    background: white; border-radius: 20px;
+    padding: 16px 18px;
+    box-shadow: 0 3px 16px rgba(0,0,0,.07);
+    border: 2.5px solid #FFE0B2;
+  }
+  .math-card-title {
+    font-family: 'Kanit', sans-serif;
+    font-size: 15px; font-weight: 800; color: var(--dark);
+    margin-bottom: 10px;
+  }
+
+  /* ── footer ── */
+  footer {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 560px;
+    padding: 0 20px 44px;
+  }
+  .footer-note {
+    background: white; border-radius: 16px;
+    padding: 14px 18px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    font-size: 12px; color: #777; line-height: 1.7;
+    border-left: 4px solid var(--green);
+  }
+  .footer-note strong { color: var(--dark); }
+
+  @media (max-width: 400px) {
+    .math-tables { gap: 7px; }
+    .tbl-btn { border-radius: 12px; }
+  }
 </style>
 </head>
 <body>
+
+<div class="bg-blob"></div>
 <div class="bg-blob"></div>
 <div class="bg-blob"></div>
 <div class="bg-blob"></div>
 
 <header>
-  <div class="site-badge">🏫 Thai (DELTA)</div>
-  <div class="site-title">เรียนอ่านภาษาไทย</div>
-  <div class="site-sub">เลือกชุดสระที่ต้องการเรียน</div>
+  <div class="site-badge">🏫 Pang English Studio</div>
+  <div class="site-title">เรียนรู้กับปาง ✨</div>
+  <div class="site-sub">ภาษาไทย &amp; คณิตศาสตร์ สำหรับเด็กประถม</div>
 </header>
 
 <main>
 
-  <!-- ── ไม้หันอากาศ ── -->
-  <div>
-    <div class="section-header">
-      <span class="section-pill" style="background:var(--pink);">ไม้หันอากาศ</span>
+  <!-- ══════════════════════════════
+       MATH SECTION
+  ══════════════════════════════ -->
+  <div class="subject-block">
+
+    <div class="subject-header sh-math">
+      <div class="subject-emoji">🔢</div>
       <div>
-        <div class="section-title">สระ อะ + ตัวสะกด</div>
-        <div class="section-desc">สระ -ะ เปลี่ยนรูปเมื่อมีตัวสะกด</div>
+        <div class="subject-title">คณิตศาสตร์</div>
+        <div class="subject-sub">สูตรคูณ แม่ 1 ถึง แม่ 5</div>
       </div>
     </div>
+
+    <!-- เรียนทีละขั้น — table picker -->
+    <div class="math-card">
+      <div class="math-card-title">📖 เรียนทีละขั้น — เลือกแม่</div>
+      <div class="math-tables">
+        <button class="tbl-btn" onclick="goMath('learn',1)">1<span>แม่ 1</span></button>
+        <button class="tbl-btn" onclick="goMath('learn',2)">2<span>แม่ 2</span></button>
+        <button class="tbl-btn" onclick="goMath('learn',3)">3<span>แม่ 3</span></button>
+        <button class="tbl-btn" onclick="goMath('learn',4)">4<span>แม่ 4</span></button>
+        <button class="tbl-btn" onclick="goMath('learn',5)">5<span>แม่ 5</span></button>
+      </div>
+    </div>
+
+    <!-- Other math modes -->
+    <div class="math-modes">
+      <button class="mode-chip" onclick="goMath('practice')">✏️ ฝึกคำนวณเอง</button>
+      <button class="mode-chip" onclick="goMath('radd')">➕ บวกซ้ำ</button>
+      <button class="mode-chip" onclick="goMath('quiz')">🎯 แบบสุ่ม</button>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════
+       THAI SECTION
+  ══════════════════════════════ -->
+  <div class="subject-block">
+
+    <div class="subject-header sh-thai">
+      <div class="subject-emoji">🇹🇭</div>
+      <div>
+        <div class="subject-title">ภาษาไทย</div>
+        <div class="subject-sub">เรียนอ่าน — สระ + ตัวสะกด</div>
+      </div>
+    </div>
+
+    <!-- ไม้หันอากาศ -->
     <a class="lesson-card" href="mai-han-lesson.html" style="border-color:var(--pink);">
-      <div class="lc-icon" style="background:#FFE4EF;font-size:52px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--pink);">ั</div>
+      <div class="lc-icon" style="background:#FFE4EF;font-size:46px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--pink);">ั</div>
       <div class="lc-body">
         <div class="lc-title">ไม้หันอากาศ <span class="kick-badge">👊 kick!</span></div>
         <div class="lc-words">รัก · ตับ · ผัก · วัน</div>
@@ -146,19 +279,10 @@
       </div>
       <div class="lc-arrow">›</div>
     </a>
-  </div>
 
-  <!-- ── สระ อา ── -->
-  <div>
-    <div class="section-header">
-      <span class="section-pill" style="background:var(--teal);">อา</span>
-      <div>
-        <div class="section-title">สระ อา</div>
-        <div class="section-desc">เขียนหลังพยัญชนะต้น</div>
-      </div>
-    </div>
+    <!-- สระ อา -->
     <a class="lesson-card" href="sara-aa-lesson.html" style="border-color:var(--teal);">
-      <div class="lc-icon" style="background:#CCFBF1;font-size:52px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--teal);">า</div>
+      <div class="lc-icon" style="background:#CCFBF1;font-size:46px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--teal);">า</div>
       <div class="lc-body">
         <div class="lc-title">สระ อา</div>
         <div class="lc-words">ขาว · ชาม · ดาว · มาก</div>
@@ -166,19 +290,10 @@
       </div>
       <div class="lc-arrow">›</div>
     </a>
-  </div>
 
-  <!-- ── สระ อิ / อี ── -->
-  <div>
-    <div class="section-header">
-      <span class="section-pill" style="background:var(--indigo);">อิ อี</span>
-      <div>
-        <div class="section-title">สระ อิ และ อี</div>
-        <div class="section-desc">เขียนเหนือพยัญชนะต้น</div>
-      </div>
-    </div>
+    <!-- สระ อิ / อี -->
     <a class="lesson-card" href="sara-i-lesson.html" style="border-color:var(--indigo);">
-      <div class="lc-icon" style="background:#EEF2FF;font-size:42px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--indigo);">ิ ี</div>
+      <div class="lc-icon" style="background:#EEF2FF;font-size:38px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--indigo);">ิ ี</div>
       <div class="lc-body">
         <div class="lc-title">สระ อิ และ อี</div>
         <div class="lc-words">หิน · บิน · ขีด · ฉีด</div>
@@ -186,19 +301,10 @@
       </div>
       <div class="lc-arrow">›</div>
     </a>
-  </div>
 
-  <!-- ── สระ อุ / อู ── -->
-  <div>
-    <div class="section-header">
-      <span class="section-pill" style="background:var(--amber);">อุ อู</span>
-      <div>
-        <div class="section-title">สระ อุ และ อู</div>
-        <div class="section-desc">เขียนใต้พยัญชนะต้น</div>
-      </div>
-    </div>
+    <!-- สระ อุ / อู -->
     <a class="lesson-card" href="sara-u-lesson.html" style="border-color:var(--amber);">
-      <div class="lc-icon" style="background:#FEF3C7;font-size:42px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--rust);">ุ ู</div>
+      <div class="lc-icon" style="background:#FEF3C7;font-size:38px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--rust);">ุ ู</div>
       <div class="lc-body">
         <div class="lc-title">สระ อุ และ อู</div>
         <div class="lc-words">พุง · ลุง · ถุง · สุก<br>พูด · ถูก · ปูน · ลูก</div>
@@ -206,6 +312,7 @@
       </div>
       <div class="lc-arrow">›</div>
     </a>
+
   </div>
 
 </main>
@@ -213,10 +320,18 @@
 <footer>
   <div class="footer-note">
     <strong>📌 สำหรับครู</strong><br>
-    แต่ละชุดสอนสระหนึ่งประเภท ฝึกการอ่านแบบ phonics — พยัญชนะต้น + สระ + ตัวสะกด
-    แนะนำให้เรียนตามลำดับจากบนลงล่าง เริ่มจากไม้หันอากาศก่อน
+    คณิต: เรียนสูตรคูณแบบบวกซ้ำทีละขั้น ฝึกนับเอง และทำแบบทดสอบสุ่ม<br>
+    ไทย: เรียนสระทีละชุด ฝึก phonics — พยัญชนะต้น + สระ + ตัวสะกด
   </div>
 </footer>
 
+<script>
+// goMath opens multiplication/index.html with a hash so it lands on the right screen
+function goMath(mode, table) {
+  let hash = '#' + mode;
+  if (table) hash += '-' + table;
+  window.location.href = 'multiplication/index.html' + hash;
+}
+</script>
 </body>
 </html>
