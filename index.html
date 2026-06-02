@@ -18,15 +18,10 @@
     --teal:   #0D9488;
     --amber:  #F59E0B;
     --rust:   #DC6B19;
-    --t1: #FF6B6B;
-    --t2: #FF9F43;
-    --t3: #F9CA24;
-    --t4: #6BCB77;
-    --t5: #4D9FFF;
+    --t1: #FF6B6B;--t2: #FF9F43;--t3: #F9CA24;--t4: #6BCB77;--t5: #4D9FFF;
     --dark: #2D2D2D;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     font-family: 'Sarabun', sans-serif;
     background: var(--cream);
@@ -34,22 +29,16 @@
     display: flex; flex-direction: column; align-items: center;
     overflow-x: hidden; position: relative;
   }
-
-  /* ── blobs ── */
   .bg-blob {
     position: fixed; border-radius: 50%; opacity: .09;
     animation: bfloat 7s ease-in-out infinite; pointer-events: none; z-index: 0;
   }
-  .bg-blob:nth-child(1) { width:320px;height:320px;background:var(--pink);  top:-90px;left:-90px;  animation-delay:0s; }
-  .bg-blob:nth-child(2) { width:220px;height:220px;background:var(--blue);  bottom:60px;right:-60px; animation-delay:2.5s; }
-  .bg-blob:nth-child(3) { width:160px;height:160px;background:var(--yellow);top:42%;left:-50px;   animation-delay:5s; }
-  .bg-blob:nth-child(4) { width:180px;height:180px;background:var(--t4);    bottom:30%;right:-50px; animation-delay:3.5s; }
-  @keyframes bfloat {
-    0%,100% { transform: translateY(0) rotate(0); }
-    50%      { transform: translateY(-22px) rotate(5deg); }
-  }
+  .bg-blob:nth-child(1){width:320px;height:320px;background:var(--pink);top:-90px;left:-90px;animation-delay:0s;}
+  .bg-blob:nth-child(2){width:220px;height:220px;background:var(--blue);bottom:60px;right:-60px;animation-delay:2.5s;}
+  .bg-blob:nth-child(3){width:160px;height:160px;background:var(--yellow);top:42%;left:-50px;animation-delay:5s;}
+  .bg-blob:nth-child(4){width:180px;height:180px;background:var(--t4);bottom:30%;right:-50px;animation-delay:3.5s;}
+  @keyframes bfloat{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-22px) rotate(5deg);}}
 
-  /* ── header ── */
   header {
     position: relative; z-index: 1;
     width: 100%; max-width: 560px;
@@ -71,7 +60,6 @@
   }
   .site-sub { font-size: 14px; color: #999; font-weight: 600; }
 
-  /* ── main ── */
   main {
     position: relative; z-index: 1;
     width: 100%; max-width: 560px;
@@ -79,31 +67,28 @@
     display: flex; flex-direction: column; gap: 32px;
   }
 
-  /* ── subject divider ── */
   .subject-block { display: flex; flex-direction: column; gap: 10px; }
 
   .subject-header {
     display: flex; align-items: center; gap: 12px;
-    padding: 14px 18px;
-    border-radius: 18px;
-    margin-bottom: 4px;
+    padding: 14px 18px; border-radius: 18px; margin-bottom: 4px;
   }
   .subject-emoji { font-size: 28px; line-height: 1; }
-  .subject-title {
-    font-family: 'Kanit', sans-serif;
-    font-size: 20px; font-weight: 800; color: var(--dark);
-  }
+  .subject-title { font-family: 'Kanit', sans-serif; font-size: 20px; font-weight: 800; color: var(--dark); }
   .subject-sub { font-size: 12px; font-weight: 600; margin-top: 1px; }
 
-  /* math header */
   .sh-math { background: linear-gradient(135deg,#FFF3E0,#FFF8F0); border: 2px solid #FFE0B2; }
   .sh-math .subject-sub { color: var(--t2); }
-
-  /* thai header */
   .sh-thai { background: linear-gradient(135deg,#FCE4EC,#FFF9F0); border: 2px solid #F8BBD0; }
   .sh-thai .subject-sub { color: var(--pink); }
 
-  /* ── lesson card ── */
+  /* group label inside thai section */
+  .group-label {
+    font-size: 11px; font-weight: 800; color: #aaa;
+    letter-spacing: .8px; text-transform: uppercase;
+    padding: 0 4px; margin-top: 6px; margin-bottom: -2px;
+  }
+
   .lesson-card {
     background: white; border-radius: 20px;
     padding: 16px 18px;
@@ -122,11 +107,7 @@
     font-size: 28px; flex-shrink: 0;
   }
   .lc-body  { flex: 1; min-width: 0; }
-  .lc-title {
-    font-family: 'Kanit', sans-serif;
-    font-size: 16px; font-weight: 800; color: var(--dark);
-    margin-bottom: 2px;
-  }
+  .lc-title { font-family: 'Kanit', sans-serif; font-size: 16px; font-weight: 800; color: var(--dark); margin-bottom: 2px; }
   .lc-words { font-size: 20px; font-weight: 800; color: #555; line-height: 1.4; }
   .lc-count { font-size: 11px; color: #bbb; font-weight: 600; margin-top: 3px; }
   .lc-arrow { font-size: 20px; color: #ccc; flex-shrink: 0; }
@@ -136,32 +117,35 @@
     background: var(--orange); color: white;
     padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle;
   }
-
-  /* ── math table buttons row ── */
-  .math-tables {
-    display: grid; grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
+  .shield-badge {
+    display: inline-block; font-size: 10px; font-weight: 800;
+    background: #10B981; color: white;
+    padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle;
   }
+
+  .math-card {
+    background: white; border-radius: 20px; padding: 16px 18px;
+    box-shadow: 0 3px 16px rgba(0,0,0,.07); border: 2.5px solid #FFE0B2;
+  }
+  .math-card-title { font-family: 'Kanit', sans-serif; font-size: 15px; font-weight: 800; color: var(--dark); margin-bottom: 10px; }
+
+  .math-tables { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
   .tbl-btn {
-    aspect-ratio: 1;
-    border: none; border-radius: 16px; cursor: pointer;
+    aspect-ratio: 1; border: none; border-radius: 16px; cursor: pointer;
     font-size: clamp(20px, 5vw, 28px); font-weight: 900;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 2px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
     color: white; box-shadow: 0 3px 12px rgba(0,0,0,.13);
     transition: transform .15s; text-shadow: 0 1px 4px rgba(0,0,0,.2);
   }
   .tbl-btn span { font-size: 10px; font-weight: 700; opacity: .9; }
   .tbl-btn:active { transform: scale(.91); }
-  .tbl-btn:nth-child(1) { background: linear-gradient(135deg,#FF6B6B,#ee5a24); }
-  .tbl-btn:nth-child(2) { background: linear-gradient(135deg,#FF9F43,#e55039); }
-  .tbl-btn:nth-child(3) { background: linear-gradient(135deg,#F9CA24,#f39c12); }
-  .tbl-btn:nth-child(4) { background: linear-gradient(135deg,#6BCB77,#27ae60); }
-  .tbl-btn:nth-child(5) { background: linear-gradient(135deg,#4D9FFF,#2980b9); }
+  .tbl-btn:nth-child(1){background:linear-gradient(135deg,#FF6B6B,#ee5a24);}
+  .tbl-btn:nth-child(2){background:linear-gradient(135deg,#FF9F43,#e55039);}
+  .tbl-btn:nth-child(3){background:linear-gradient(135deg,#F9CA24,#f39c12);}
+  .tbl-btn:nth-child(4){background:linear-gradient(135deg,#6BCB77,#27ae60);}
+  .tbl-btn:nth-child(5){background:linear-gradient(135deg,#4D9FFF,#2980b9);}
 
-  .math-modes {
-    display: flex; gap: 8px; flex-wrap: wrap;
-  }
+  .math-modes { display: flex; gap: 8px; flex-wrap: wrap; }
   .mode-chip {
     flex: 1; min-width: 110px;
     padding: 12px 8px; border: 2.5px solid #eee; border-radius: 16px;
@@ -173,28 +157,13 @@
   }
   .mode-chip:hover { border-color: var(--t4); color: var(--t4); transform: translateY(-2px); }
 
-  /* ── math mini card ── */
-  .math-card {
-    background: white; border-radius: 20px;
-    padding: 16px 18px;
-    box-shadow: 0 3px 16px rgba(0,0,0,.07);
-    border: 2.5px solid #FFE0B2;
-  }
-  .math-card-title {
-    font-family: 'Kanit', sans-serif;
-    font-size: 15px; font-weight: 800; color: var(--dark);
-    margin-bottom: 10px;
-  }
-
-  /* ── footer ── */
   footer {
     position: relative; z-index: 1;
     width: 100%; max-width: 560px;
     padding: 0 20px 44px;
   }
   .footer-note {
-    background: white; border-radius: 16px;
-    padding: 14px 18px;
+    background: white; border-radius: 16px; padding: 14px 18px;
     box-shadow: 0 2px 12px rgba(0,0,0,.06);
     font-size: 12px; color: #777; line-height: 1.7;
     border-left: 4px solid var(--green);
@@ -222,11 +191,8 @@
 
 <main>
 
-  <!-- ══════════════════════════════
-       MATH SECTION
-  ══════════════════════════════ -->
+  <!-- MATH -->
   <div class="subject-block">
-
     <div class="subject-header sh-math">
       <div class="subject-emoji">🔢</div>
       <div>
@@ -235,7 +201,6 @@
       </div>
     </div>
 
-    <!-- เรียนทีละขั้น — table picker -->
     <div class="math-card">
       <div class="math-card-title">📖 เรียนทีละขั้น — เลือกแม่</div>
       <div class="math-tables">
@@ -247,20 +212,15 @@
       </div>
     </div>
 
-    <!-- Other math modes -->
     <div class="math-modes">
       <button class="mode-chip" onclick="goMath('practice')">✏️ ฝึกคำนวณเอง</button>
       <button class="mode-chip" onclick="goMath('radd')">➕ บวกซ้ำ</button>
       <button class="mode-chip" onclick="goMath('quiz')">🎯 แบบสุ่ม</button>
     </div>
-
   </div>
 
-  <!-- ══════════════════════════════
-       THAI SECTION
-  ══════════════════════════════ -->
+  <!-- THAI -->
   <div class="subject-block">
-
     <div class="subject-header sh-thai">
       <div class="subject-emoji">🇹🇭</div>
       <div>
@@ -269,18 +229,70 @@
       </div>
     </div>
 
-    <!-- ไม้หันอากาศ -->
+    <!-- group: ไม้หันอากาศ + ไม้ไต่คู้ -->
+    <div class="group-label">สระเสียงสั้น — ตัวสะกดเตะสระออก</div>
+
+    <!-- ไม้หันอากาศ -ั -->
     <a class="lesson-card" href="mai-han-lesson.html" style="border-color:var(--pink);">
       <div class="lc-icon" style="background:#FFE4EF;font-size:46px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--pink);">ั</div>
       <div class="lc-body">
-        <div class="lc-title">ไม้หันอากาศ <span class="kick-badge">👊 kick!</span></div>
+        <div class="lc-title">ไม้หันอากาศ -ั <span class="kick-badge">👊 kick!</span></div>
         <div class="lc-words">รัก · ตับ · ผัก · วัน</div>
         <div class="lc-count">4 คำ · 5 ขั้นตอน</div>
       </div>
       <div class="lc-arrow">›</div>
     </a>
 
-    <!-- สระ อา -->
+    <!-- เ-็ ไม้ไต่คู้ -->
+    <a class="lesson-card" href="mai-tai-ku.html" style="border-color:#A78BFA;">
+      <div class="lc-icon" style="background:#EDE9FE;font-size:36px;font-weight:800;font-family:'Sarabun',sans-serif;color:#A78BFA;">เ-็</div>
+      <div class="lc-body">
+        <div class="lc-title">ไม้ไต่คู้ เ-็ <span class="kick-badge">👊 kick!</span></div>
+        <div class="lc-words">เป็ด · เล็ง · เจ็ด · เม็ด · เห็บ · เบ็ด</div>
+        <div class="lc-count">6 คำ · 5 ขั้นตอน</div>
+      </div>
+      <div class="lc-arrow">›</div>
+    </a>
+
+    <!-- แ-็ ไม้ไต่คู้ -->
+    <a class="lesson-card" href="mai-tai-ku-ae.html" style="border-color:#F59E0B;">
+      <div class="lc-icon" style="background:#FEF3C7;font-size:36px;font-weight:800;font-family:'Sarabun',sans-serif;color:#F59E0B;">แ-็</div>
+      <div class="lc-body">
+        <div class="lc-title">ไม้ไต่คู้ แ-็ <span class="kick-badge">👊 kick!</span></div>
+        <div class="lc-words">แพ็ค · แล็บ · แร็พ · แว็บ · แท็บ</div>
+        <div class="lc-count">5 คำ · 5 ขั้นตอน</div>
+      </div>
+      <div class="lc-arrow">›</div>
+    </a>
+
+    <!-- group: โล่บล็อก + ัว -->
+    <div class="group-label" style="margin-top:8px;">สระที่หายเมื่อมีตัวสะกด</div>
+
+    <!-- โ-ะ shield -->
+    <a class="lesson-card" href="sara-o-short.html" style="border-color:#10B981;">
+      <div class="lc-icon" style="background:#DCFCE7;font-size:36px;font-weight:800;font-family:'Sarabun',sans-serif;color:#10B981;">โ-ะ</div>
+      <div class="lc-body">
+        <div class="lc-title">สระ โ-ะ <span class="shield-badge">🛡️ shield!</span></div>
+        <div class="lc-words">ลบ · ผม · คด · รถ · ต้ม · ดม</div>
+        <div class="lc-count">6 คำ · 5 ขั้นตอน</div>
+      </div>
+      <div class="lc-arrow">›</div>
+    </a>
+
+    <!-- ัว -->
+    <a class="lesson-card" href="sara-ua.html" style="border-color:#C084FC;">
+      <div class="lc-icon" style="background:#FAF0FF;font-size:36px;font-weight:800;font-family:'Sarabun',sans-serif;color:#C084FC;">ัว</div>
+      <div class="lc-body">
+        <div class="lc-title">สระ ัว <span class="kick-badge">👊 kick!</span></div>
+        <div class="lc-words">ลวง · ท่วม · กวน · ช่วย · ตวง</div>
+        <div class="lc-count">5 คำ · 5 ขั้นตอน</div>
+      </div>
+      <div class="lc-arrow">›</div>
+    </a>
+
+    <!-- group: other vowels -->
+    <div class="group-label" style="margin-top:8px;">สระอื่น ๆ</div>
+
     <a class="lesson-card" href="sara-aa-lesson.html" style="border-color:var(--teal);">
       <div class="lc-icon" style="background:#CCFBF1;font-size:46px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--teal);">า</div>
       <div class="lc-body">
@@ -291,7 +303,6 @@
       <div class="lc-arrow">›</div>
     </a>
 
-    <!-- สระ อิ / อี -->
     <a class="lesson-card" href="sara-i-lesson.html" style="border-color:var(--indigo);">
       <div class="lc-icon" style="background:#EEF2FF;font-size:38px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--indigo);">ิ ี</div>
       <div class="lc-body">
@@ -302,7 +313,6 @@
       <div class="lc-arrow">›</div>
     </a>
 
-    <!-- สระ อุ / อู -->
     <a class="lesson-card" href="sara-u-lesson.html" style="border-color:var(--amber);">
       <div class="lc-icon" style="background:#FEF3C7;font-size:38px;font-weight:800;font-family:'Sarabun',sans-serif;color:var(--rust);">ุ ู</div>
       <div class="lc-body">
@@ -326,7 +336,6 @@
 </footer>
 
 <script>
-// goMath opens multiplication/index.html with a hash so it lands on the right screen
 function goMath(mode, table) {
   let hash = '#' + mode;
   if (table) hash += '-' + table;
