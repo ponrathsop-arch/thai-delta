@@ -457,7 +457,7 @@ function populateLesson(w){
   document.getElementById('s2-title').textContent=w.word+' = 3 เสียง';
   document.getElementById('s-init-char').textContent=w.init;
   document.getElementById('s-final-char').textContent=w.final;
-  document.getElementById('kick-label').textContent=w.final;
+  {const _kl=document.getElementById('kick-label');if(_kl)_kl.textContent=w.final;}
   document.getElementById('result-word').textContent=w.word;
   document.getElementById('s3-title').textContent='โครงสร้างของ '+w.word;
   document.getElementById('s3-bag-char').textContent=w.final;
@@ -540,7 +540,7 @@ function resetStep2(){
   const btn=document.getElementById('kickBtn');
   btn.disabled=false;
   const w=WORDS[activeIndex];
-  btn.innerHTML='👊 '+w.final+' เตะ ะ!';
+  btn.innerHTML='👊 <span id="kick-label">'+w.final+'</span> เตะ ะ!';
   btn.onclick=doKick;
 }
 
