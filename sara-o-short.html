@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เรียนอ่าน: สระโ-ะ (มีตัวสะกด)</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;800&family=Kanit:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F0FFF4;--green:#10B981;--blue:#3B82F6;--yellow:#FCD34D;
+    --orange:#F97316;--teal:#14B8A6;--red:#EF4444;
+    --dark:#1A2E1A;--light-green:#DCFCE7;--purple:#8B5CF6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Sarabun',sans-serif;background:var(--cream);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;position:relative;}
+  .bg-blob{position:fixed;border-radius:50%;opacity:.10;animation:bfloat 6s ease-in-out infinite;pointer-events:none;z-index:0;}
+  .bg-blob:nth-child(1){width:260px;height:260px;background:var(--green);top:-80px;left:-80px;}
+  .bg-blob:nth-child(2){width:180px;height:180px;background:var(--teal);bottom:30px;right:-50px;animation-delay:2s;}
+  .bg-blob:nth-child(3){width:120px;height:120px;background:var(--yellow);top:40%;left:-40px;animation-delay:4s;}
+  @keyframes bfloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
+
+  .screen{display:none;position:relative;z-index:1;width:100%;max-width:480px;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:0 20px;}
+  .screen.active{display:flex;}
+
+  /* HOME */
+  .home-title{font-family:'Kanit',sans-serif;font-size:26px;font-weight:800;color:var(--dark);margin-bottom:4px;}
+  .home-sub{font-size:14px;color:#888;margin-bottom:28px;}
+  .word-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;width:100%;max-width:380px;}
+  .word-card{background:white;border-radius:20px;padding:14px 8px;box-shadow:0 4px 18px rgba(0,0,0,.09);display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;border:3px solid transparent;transition:transform .2s,box-shadow .2s;}
+  .word-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.13);}
+  .word-card:active{transform:scale(.97);}
+  .word-card .wc-word{font-size:44px;font-weight:800;color:var(--dark);line-height:1.1;}
+  .word-card .wc-eng{font-size:11px;color:#aaa;font-weight:600;}
+  .word-card .wc-emoji{font-size:24px;}
+  .word-card.c0{border-color:#10B981;}.word-card.c1{border-color:#3B82F6;}
+  .word-card.c2{border-color:#F97316;}.word-card.c3{border-color:#8B5CF6;}
+  .word-card.c4{border-color:#EF4444;}.word-card.c5{border-color:#14B8A6;}
+  .wc-badge{font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;color:white;}
+  .wc-badge.c0{background:#10B981;}.wc-badge.c1{background:#3B82F6;}
+  .wc-badge.c2{background:#F97316;}.wc-badge.c3{background:#8B5CF6;}
+  .wc-badge.c4{background:#EF4444;}.wc-badge.c5{background:#14B8A6;}
+  .home-note{margin-top:20px;width:100%;max-width:380px;background:var(--light-green);border-radius:14px;padding:10px 14px;font-size:12px;color:#555;line-height:1.6;text-align:left;border-left:3px solid var(--green);}
+  .home-note .tn-label{font-size:10px;font-weight:800;color:var(--green);letter-spacing:.5px;margin-bottom:2px;}
+
+  /* LESSON */
+  .lesson-wrap{width:100%;max-width:480px;min-height:100vh;display:flex;flex-direction:column;padding:0 20px;}
+  .progress-bar{display:flex;justify-content:center;gap:8px;padding:16px 0 8px;}
+  .dot{width:10px;height:10px;border-radius:50%;background:#ddd;transition:background .3s,transform .3s;}
+  .dot.active{background:var(--green);transform:scale(1.3);}
+  .dot.done{background:var(--teal);}
+  .step{display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px 10px 90px;animation:slideIn .4s ease;}
+  .step.active{display:flex;}
+  @keyframes slideIn{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
+  .step-badge{background:var(--green);color:white;font-size:13px;font-weight:700;padding:4px 16px;border-radius:20px;margin-bottom:12px;letter-spacing:.5px;}
+  h2{font-family:'Kanit',sans-serif;font-size:21px;color:var(--dark);margin-bottom:14px;font-weight:700;}
+  .teacher-note{width:100%;max-width:340px;background:var(--light-green);border-radius:14px;padding:9px 14px;font-size:12px;color:#555;line-height:1.6;margin-top:10px;text-align:left;border-left:3px solid var(--green);}
+  .teacher-note .tn-label{font-size:10px;font-weight:800;color:var(--green);letter-spacing:.5px;margin-bottom:2px;}
+
+  /* Step 1 */
+  .big-word{font-size:120px;font-weight:800;color:var(--dark);line-height:1.15;animation:popIn .5s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes popIn{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}
+  .word-emoji{font-size:44px;animation:hb 1.2s ease-in-out infinite;margin-top:8px;}
+  @keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.18);}}
+
+  /* ══ STEP 2 ══ */
+  .shield-note{display:flex;align-items:center;gap:8px;background:white;border-radius:14px;padding:8px 14px;font-size:13px;color:#555;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:2px solid var(--green);max-width:340px;}
+
+  /* scene-wrap: relative container, โ ghost is absolute inside */
+  .scene-wrap{position:relative;width:100%;max-width:380px;margin:4px auto 14px;padding-top:60px;}
+  .cards-row{display:flex;align-items:center;justify-content:center;gap:10px;}
+  .card-col{display:flex;flex-direction:column;align-items:center;gap:8px;}
+
+  .scene-card{background:white;border-radius:20px;width:90px;height:90px;box-shadow:0 4px 14px rgba(0,0,0,.08);border:3px solid transparent;display:flex;align-items:center;justify-content:center;position:relative;overflow:visible;}
+  .scene-card.green {border-color:var(--green);}
+  .scene-card.blue  {border-color:var(--blue);}
+  .scene-card.orange{border-color:var(--orange);}
+  .card-char{font-size:50px;font-weight:800;color:var(--dark);line-height:1;font-family:'Sarabun',sans-serif;}
+
+  .role-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;color:white;white-space:nowrap;transition:opacity .3s;}
+  .role-badge.green {background:var(--green);}
+  .role-badge.blue  {background:var(--blue);}
+  .role-badge.orange{background:var(--orange);}
+
+  .dash{font-size:24px;color:#bbb;font-weight:700;margin-bottom:30px;transition:opacity .3s;}
+
+  /* Tone mark overlay on ต card (for ต้ม) — shown from start */
+  #tone-overlay{
+    position:absolute;top:-40px;left:50%;
+    transform:translateX(-50%);
+    font-size:38px;font-weight:800;color:var(--dark);
+    pointer-events:none;
+    /* shown/hidden via JS */
+  }
+
+  /* no โ ghost needed */
+
+  /* ── SHIELD ANIMATION ── */
+  /* The final card (ลบ's บ etc.) charges left and slams the vowel card */
+  #s-final-card.charge{
+    animation:shieldCharge .55s cubic-bezier(.4,0,.6,1) forwards;
+    z-index:10;
+  }
+  @keyframes shieldCharge{
+    0%  {transform:translateX(0);}
+    60% {transform:translateX(-115px) scale(1.08);}
+    75% {transform:translateX(-110px) scale(1.12);}
+    100%{transform:translateX(0);}
+  }
+
+  /* Vowel card shatters when hit */
+  #s-vowel-card.shatter{
+    animation:vowelShatter .5s ease .3s forwards;
+  }
+  @keyframes vowelShatter{
+    0%  {transform:scale(1) rotate(0);opacity:1;}
+    20% {transform:scale(1.15) rotate(-4deg);opacity:1;}
+    60% {transform:scale(.6) rotate(12deg) translateY(-30px);opacity:.4;}
+    100%{transform:scale(0) rotate(25deg) translateY(-60px);opacity:0;}
+  }
+
+  /* ะ particle bursts */
+  .sara-burst{
+    position:absolute;font-size:32px;font-weight:800;color:var(--orange);
+    font-family:'Sarabun',sans-serif;pointer-events:none;display:none;
+    animation:burstFly .7s ease forwards;
+  }
+  .sara-burst:nth-child(1){animation-delay:0.28s;}
+  .sara-burst:nth-child(2){animation-delay:0.32s;}
+  .sara-burst:nth-child(3){animation-delay:0.35s;}
+  @keyframes burstFly{
+    0%  {opacity:1;transform:translate(0,0) scale(1);}
+    100%{opacity:0;transform:translate(var(--bx,30px),var(--by,-80px)) scale(.3) rotate(var(--br,20deg));}
+  }
+
+  /* shield badge on final card */
+  .shield-label{
+    position:absolute;top:-36px;left:50%;transform:translateX(-50%);
+    font-size:22px;pointer-events:none;
+    animation:shieldBob 1.5s ease-in-out infinite;
+  }
+  @keyframes shieldBob{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(-4px);}}
+
+  .kick-btn{margin-top:6px;background:var(--green);color:white;border:none;border-radius:30px;padding:11px 26px;font-size:15px;font-family:'Kanit',sans-serif;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(16,185,129,.4);transition:transform .2s;}
+  .kick-btn:hover{transform:scale(1.05);}
+  .kick-btn:active{transform:scale(.97);}
+  .kick-btn:disabled{background:#ccc;box-shadow:none;cursor:default;}
+
+  .result-word{font-size:80px;font-weight:800;color:var(--green);font-family:'Sarabun',sans-serif;opacity:0;transform:scale(.5);margin-top:8px;pointer-events:none;}
+  .result-word.pop{animation:popIn .5s cubic-bezier(.34,1.56,.64,1) .1s forwards;}
+
+  /* Step 3 */
+  .s5-panels{display:flex;width:100%;max-width:340px;border-radius:24px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.10);margin:10px auto;}
+  .s5-left{flex:1.2;background:white;padding:14px 12px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:3px solid var(--teal);gap:6px;}
+  .s5-right{flex:1;background:white;padding:14px 12px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;}
+  .s5-word-wrap{position:relative;display:inline-block;font-size:72px;font-weight:800;color:var(--dark);font-family:'Sarabun',sans-serif;line-height:1.3;}
+  .s5-underline{position:absolute;bottom:-4px;left:0;width:100%;height:4px;background:var(--teal);border-radius:4px;}
+  .bag-outer{position:relative;width:112px;height:120px;display:flex;align-items:center;justify-content:center;}
+  .bag-outer svg{position:absolute;top:0;left:0;width:100%;height:100%;}
+  .bag-char{position:relative;z-index:2;font-size:58px;font-weight:800;color:var(--dark);margin-top:16px;line-height:1;font-family:'Sarabun',sans-serif;}
+  .label-tag{font-size:11px;font-weight:800;padding:4px 12px;border-radius:20px;color:white;white-space:nowrap;}
+  .label-tag.teal  {background:var(--teal);}
+  .label-tag.orange{background:var(--orange);}
+  .label-sub{font-size:12px;color:#666;font-weight:600;margin-top:2px;}
+
+  /* Step 4 */
+  .blend-scene{display:flex;align-items:center;justify-content:center;gap:6px;margin:12px 0;flex-wrap:wrap;}
+  .blend-part{font-size:42px;font-weight:800;opacity:0;transform:scale(.5);}
+  .blend-part.show{animation:blendIn .4s cubic-bezier(.34,1.56,.64,1) forwards;}
+  @keyframes blendIn{to{opacity:1;transform:scale(1);}}
+  .blend-arrow{font-size:24px;color:#bbb;opacity:0;transition:opacity .4s;}
+  .blend-arrow.show{opacity:1;}
+  .blend-result{font-size:84px;font-weight:800;color:var(--green);opacity:0;}
+  .blend-result.show{animation:blendIn .6s cubic-bezier(.34,1.56,.64,1) forwards;}
+  .sparkles{display:flex;justify-content:center;gap:6px;font-size:26px;margin-top:6px;opacity:0;transition:opacity .5s;}
+  .sparkles.show{opacity:1;}
+  .sp{animation:sparkSpin 1.5s linear infinite;}
+  .sp:nth-child(2){animation-delay:.3s;}.sp:nth-child(3){animation-delay:.6s;}
+  @keyframes sparkSpin{0%,100%{transform:scale(1) rotate(0);}50%{transform:scale(1.3) rotate(180deg);}}
+  .info-box{background:white;border-radius:18px;padding:12px 18px;box-shadow:0 4px 14px rgba(0,0,0,.07);font-size:14px;color:#444;line-height:1.7;margin:8px 0;text-align:center;width:100%;max-width:340px;}
+
+  /* Nav */
+  .nav-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;display:flex;justify-content:space-between;align-items:center;padding:14px 24px 24px;background:linear-gradient(to top,var(--cream) 70%,transparent);z-index:10;}
+  .nav-btn{border:none;border-radius:30px;padding:13px 28px;font-size:16px;font-family:'Kanit',sans-serif;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+  .nav-btn:hover{transform:scale(1.05);}
+  .nav-btn:active{transform:scale(.97);}
+  .btn-next{background:var(--green);color:white;box-shadow:0 4px 14px rgba(16,185,129,.4);}
+  .btn-back{background:white;color:#999;border:2px solid #eee;}
+  .btn-back:disabled{opacity:.3;cursor:default;}
+  .step-counter{font-size:13px;color:#aaa;font-weight:600;}
+  .home-back-btn{position:fixed;top:18px;left:50%;transform:translateX(-200px);background:white;border:2px solid #eee;border-radius:20px;padding:8px 18px;font-size:13px;font-family:'Kanit',sans-serif;font-weight:700;color:#999;cursor:pointer;z-index:20;}
+  .home-back-btn.hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="bg-blob"></div><div class="bg-blob"></div><div class="bg-blob"></div>
+
+<!-- HOME -->
+<div class="screen active" id="homeScreen">
+  <div style="position:relative;z-index:1;width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;padding:40px 20px 100px;">
+    <div class="step-badge" style="margin-bottom:8px;">📚 สระ โ-ะ (มีตัวสะกด)</div>
+    <div class="home-title">เลือกคำที่จะเรียน</div>
+    <div class="home-sub">เรียนทีละคำ กดเพื่อเริ่ม!</div>
+    <div class="word-grid" id="wordGrid"></div>
+    <div class="home-note">
+      <div class="tn-label">📌 สำหรับครู</div>
+      เมื่อสระ <strong>โ-ะ</strong> มีตัวสะกด ตัวสะกดทำหน้าที่เป็น <strong>โล่</strong> —
+      บล็อก <strong>โ-ะ</strong> ออกทั้งหมด เหลือแค่พยัญชนะต้นและตัวสะกดอยู่ด้วยกัน
+    </div>
+  </div>
+</div>
+
+<!-- LESSON -->
+<button class="home-back-btn hidden" id="homeBackBtn" onclick="goHome()">◀ เลือกคำใหม่</button>
+
+<div class="screen" id="lessonScreen">
+  <div class="lesson-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- STEP 1 -->
+    <div class="step" id="step1">
+      <div class="step-badge">✨ วันนี้เรียนคำว่า...</div>
+      <h2>อ่านคำนี้ได้ไหม?</h2>
+      <div class="big-word" id="s1-word">ลบ</div>
+      <div class="word-emoji" id="s1-emoji">🧹</div>
+      <div class="teacher-note" style="margin-top:20px;">
+        <div class="tn-label">📌 สำหรับครู</div>
+        ชี้ที่คำแล้วถามนักเรียน <em>"มีกี่เสียง?"</em> และ <em>"โ อยู่ที่ไหน?"</em>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" id="step2">
+      <div class="step-badge">🛡️ เสียงในคำ</div>
+      <h2 id="s2-title">ลบ = 3 เสียง</h2>
+      <div class="shield-note">
+        <span style="font-size:20px;">🛡️</span>
+        <span>ตัวสะกด <strong id="shield-char-note">บ</strong> คือ <strong>โล่</strong> — บล็อก <strong>ะ</strong> ออก!</span>
+      </div>
+
+      <!-- burst particles (ะ shatter) — absolutely inside scene-wrap -->
+      <div class="scene-wrap" id="scene-wrap">
+        <!-- ะ burst particles (3 pieces) -->
+        <span class="sara-burst" id="burst1" style="--bx:-50px;--by:-90px;--br:-35deg;">ะ</span>
+        <span class="sara-burst" id="burst2" style="--bx:60px;--by:-70px;--br:45deg;">ะ</span>
+        <span class="sara-burst" id="burst3" style="--bx:10px;--by:-110px;--br:10deg;">ะ</span>
+
+        <div class="cards-row">
+          <!-- พยัญชนะต้น -->
+          <div class="card-col" id="init-col">
+            <div class="scene-card green" id="s-init-card">
+              <!-- tone mark for ต้ม / ดม — shown from start if word has tone -->
+              <span id="tone-overlay" style="display:none;"></span>
+              <span class="card-char" id="s-init-char">ล</span>
+            </div>
+            <div class="role-badge green">พยัญชนะต้น</div>
+          </div>
+
+          <div class="dash" id="dash1">-</div>
+
+          <!-- สระ โ-ะ -->
+          <div class="card-col" id="vowel-col">
+            <div class="scene-card blue" id="s-vowel-card">
+              <span class="card-char" id="vowel-char">โ-ะ</span>
+            </div>
+            <div class="role-badge blue" id="vowel-badge">สระ</div>
+          </div>
+
+          <div class="dash" id="dash2">-</div>
+
+          <!-- ตัวสะกด (shield) -->
+          <div class="card-col" id="final-col">
+            <div class="scene-card orange" id="s-final-card">
+              <!-- shield badge above -->
+              <span class="shield-label" id="shield-label">🛡️</span>
+              <span class="card-char" id="s-final-char">บ</span>
+            </div>
+            <div class="role-badge orange">ตัวสะกด</div>
+          </div>
+        </div>
+      </div><!-- /scene-wrap -->
+
+      <div class="result-word" id="result-word">ลบ</div>
+
+      <button class="kick-btn" id="kickBtn" onclick="doKick()">
+        🛡️ <span id="kick-label">บ</span> บล็อก ะ!
+      </button>
+
+      <div class="teacher-note" style="margin-top:12px;">
+        <div class="tn-label">📌 สำหรับครู</div>
+        ตัวสะกดทำหน้าที่เป็น <strong>โล่</strong> ป้องกัน — ชนะ โ-ะ
+        ทำให้ <strong>โ-ะ</strong> หายไปทั้งหมด เหลือแค่พยัญชนะต้นและตัวสะกด
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" id="step3">
+      <div class="step-badge">🗺️ แผนผังคำ</div>
+      <h2 id="s3-title">โครงสร้างของ ลบ</h2>
+      <div class="s5-panels">
+        <div class="s5-left">
+          <div class="s5-word-wrap" id="s3-left-word">โล<div class="s5-underline"></div></div>
+          <div class="label-tag teal" style="margin-top:10px;">พยัญชนะต้น</div>
+          <div class="label-sub">สระ โ-ะ → ะ หาย โ หาย</div>
+        </div>
+        <div class="s5-right">
+          <div class="bag-outer">
+            <svg viewBox="0 0 130 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="65" cy="97" rx="54" ry="40" stroke="#aaa" stroke-width="4.5" fill="#f5f5f5"/>
+              <rect x="43" y="56" width="44" height="16" rx="8" stroke="#aaa" stroke-width="4" fill="#f5f5f5"/>
+              <path d="M43 56 Q46 38 52 32 Q58 27 65 27 Q72 27 78 32 Q84 38 87 56" stroke="#aaa" stroke-width="4" fill="none" stroke-linecap="round"/>
+              <path d="M48 55 Q51 41 56 36 Q61 31 65 31 Q69 31 74 36 Q79 41 82 55" stroke="#ccc" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+            <span class="bag-char" id="s3-bag-char">บ</span>
+          </div>
+          <div class="label-tag orange" style="margin-top:4px;">ตัวสะกด (โล่)</div>
+          <div class="label-sub">🛡️ อยู่ในถุง</div>
+        </div>
+      </div>
+      <div class="teacher-note">
+        <div class="tn-label">📌 สำหรับครู</div>
+        ถามนักเรียน <em>"โ-ะ หายไปไหน?"</em> ฝึกให้เข้าใจว่า
+        <strong>ตัวสะกดบล็อก ะ และโ ออก เหลือแค่พยัญชนะต้นและตัวสะกด</strong>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step" id="step4">
+      <div class="step-badge">🎯 ผสมเสียง!</div>
+      <h2>รวมเสียงให้เป็นคำ</h2>
+      <div class="blend-scene">
+        <div class="blend-part" id="bp1" style="color:var(--green)">ล</div>
+        <div class="blend-part" id="bp2" style="color:var(--blue)">โ-ะ</div>
+        <div class="blend-part" id="bp3" style="color:var(--orange)">บ</div>
+        <div class="blend-part" id="bp4" style="color:var(--purple);display:none;"></div>
+        <div class="blend-arrow" id="barrow">➜</div>
+        <div class="blend-result" id="bres">ลบ</div>
+      </div>
+      <div class="sparkles" id="sparkles">
+        <span class="sp">⭐</span><span class="sp">✨</span><span class="sp">🌟</span>
+      </div>
+      <div class="info-box" style="background:var(--light-green);margin-top:10px;">
+        🎉 เก่งมาก!<br>
+        <strong id="s4-word" style="font-size:46px;color:var(--green)">ลบ</strong><br>
+        <span style="color:#777">แปลว่า <strong id="s4-eng" style="color:var(--dark)">erase</strong> <span id="s4-emoji">🧹</span></span>
+      </div>
+      <div class="teacher-note">
+        <div class="tn-label">📌 สำหรับครู</div>
+        ให้นักเรียนอ่านออกเสียงพร้อมกัน ช้า→เร็ว
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step" id="step5">
+      <div class="step-badge">🏆 จบแล้ว!</div>
+      <h2>เก่งมากเลย! 🎉</h2>
+      <div class="big-word" id="s5-word" style="font-size:100px;">ลบ</div>
+      <div class="word-emoji" id="s5-emoji">🧹</div>
+      <div class="info-box" style="margin-top:20px;background:var(--light-green);">
+        <span id="s5-breakdown">ล + โ-ะ + บ</span> = <strong id="s5-word2" style="color:var(--green)">ลบ</strong> = <strong id="s5-eng">erase</strong>
+      </div>
+      <div class="teacher-note">
+        <div class="tn-label">📌 สำหรับครู</div>
+        ให้นักเรียนลองเขียนคำนี้ด้วยตัวเอง แล้วระบุ พยัญชนะต้น / สระ / ตัวสะกด
+      </div>
+      <div id="s5-next-preview" style="margin-top:10px;font-size:13px;color:#aaa;font-weight:600;"></div>
+      <button id="s5-next-btn" style="margin-top:16px;background:var(--teal);color:white;border:none;border-radius:30px;padding:12px 28px;font-size:15px;font-family:'Kanit',sans-serif;font-weight:700;cursor:pointer;box-shadow:0 4px 12px rgba(20,184,166,.4);">▶ คำถัดไป</button>
+    </div>
+  </div>
+</div>
+
+<div class="nav-bar" id="navBar" style="display:none;">
+  <button class="nav-btn btn-back" id="btnBack" onclick="goBack()" disabled>◀ ย้อนกลับ</button>
+  <div class="step-counter" id="stepCounter">1 / 5</div>
+  <button class="nav-btn btn-next" id="btnNext" onclick="goNext()">ถัดไป ▶</button>
+</div>
+
+<script>
+// tone: วรรณยุกต์ to show on init card from start (empty string = none)
+const WORDS=[
+  {word:'ลบ', eng:'erase',  emoji:'🧹', init:'ล',final:'บ',tone:'', breakdown:'ล + โ-ะ + บ'},
+  {word:'ผม', eng:'hair',   emoji:'💇', init:'ผ',final:'ม',tone:'', breakdown:'ผ + โ-ะ + ม'},
+  {word:'คด', eng:'bent/corrupt',emoji:'↩️',init:'ค',final:'ด',tone:'',breakdown:'ค + โ-ะ + ด'},
+  {word:'รถ', eng:'car',    emoji:'🚗', init:'ร',final:'ถ',tone:'', breakdown:'ร + โ-ะ + ถ'},
+  {word:'ต้ม', eng:'boil',  emoji:'🍲', init:'ต',final:'ม',tone:'้', breakdown:'ต + โ-ะ + ม'},
+  {word:'ดม', eng:'sniff',  emoji:'👃', init:'ด',final:'ม',tone:'', breakdown:'ด + โ-ะ + ม'},
+];
+const COLORS=['c0','c1','c2','c3','c4','c5'];
+const totalSteps=5;
+let current=1,kickDone=false,activeIndex=0;
+
+function buildHome(){
+  const grid=document.getElementById('wordGrid');
+  grid.innerHTML='';
+  WORDS.forEach((w,i)=>{
+    const c=document.createElement('div');
+    c.className='word-card '+COLORS[i];
+    c.innerHTML='<div class="wc-emoji">'+w.emoji+'</div>'+
+      '<div class="wc-word">'+w.word+'</div>'+
+      '<div class="wc-eng">'+w.eng+'</div>'+
+      '<div class="wc-badge '+COLORS[i]+'">'+w.init+'–โ-ะ–'+w.final+'</div>';
+    c.addEventListener('click',()=>startWord(i));
+    grid.appendChild(c);
+  });
+}
+
+function startWord(idx){
+  activeIndex=idx;
+  populateLesson(WORDS[idx]);
+  updateStep5Button();
+  document.getElementById('homeScreen').classList.remove('active');
+  document.getElementById('lessonScreen').classList.add('active');
+  document.getElementById('navBar').style.display='flex';
+  document.getElementById('homeBackBtn').classList.remove('hidden');
+  current=1;showStep(1);
+}
+
+function updateStep5Button(){
+  const isLast=activeIndex>=WORDS.length-1;
+  const btn=document.getElementById('s5-next-btn');
+  const prev=document.getElementById('s5-next-preview');
+  if(isLast){
+    btn.textContent='🏠 กลับหน้าหลัก';btn.style.background='var(--blue)';btn.onclick=goHome;
+    if(prev)prev.textContent='🎉 เรียนครบทุกคำแล้ว!';
+  } else {
+    const nw=WORDS[activeIndex+1];
+    btn.innerHTML='คำถัดไป: <strong>'+nw.word+'</strong> '+nw.emoji+' ▶';
+    btn.style.background='var(--teal)';btn.onclick=()=>startWord(activeIndex+1);
+    if(prev)prev.textContent='คำ '+(activeIndex+1)+' / '+WORDS.length;
+  }
+}
+
+function goHome(){
+  document.getElementById('lessonScreen').classList.remove('active');
+  document.getElementById('homeScreen').classList.add('active');
+  document.getElementById('navBar').style.display='none';
+  document.getElementById('homeBackBtn').classList.add('hidden');
+}
+
+function populateLesson(w){
+  document.getElementById('s1-word').textContent=w.word;
+  document.getElementById('s1-emoji').textContent=w.emoji;
+  document.getElementById('s2-title').textContent=w.word+' = 3 เสียง';
+  document.getElementById('s-init-char').textContent=w.init;
+  document.getElementById('s-final-char').textContent=w.final;
+  const klSpan = document.getElementById('kick-label');
+  if(klSpan) klSpan.textContent=w.final;
+  document.getElementById('shield-char-note').textContent=w.final;
+  document.getElementById('result-word').textContent=w.word;
+  document.getElementById('s3-title').textContent='โครงสร้างของ '+w.word;
+  document.getElementById('s3-bag-char').textContent=w.final;
+  const wrap=document.getElementById('s3-left-word');
+  wrap.innerHTML=(w.tone ? w.init+w.tone : w.init)+'<div class="s5-underline"></div>';
+  document.getElementById('bp1').textContent = w.init;
+  document.getElementById('bp2').textContent='โ-ะ';
+  document.getElementById('bp3').textContent=w.final;
+  const bp4=document.getElementById('bp4');
+  if(w.tone){
+    bp4.style.display='';
+    bp4.innerHTML =
+      '<span style="display:inline-block;font-size:42px;font-weight:800;font-family:Sarabun,sans-serif;' +
+      'color:var(--purple);' +
+      'clip-path:inset(0 0 62% 0);' +
+      '-webkit-clip-path:inset(0 0 62% 0);">' +
+      'ต' + w.tone +
+      '</span>';
+  } else {
+    bp4.style.display='none';
+  }
+  document.getElementById('bp3').textContent=w.final;
+  document.getElementById('bres').textContent=w.word;
+  document.getElementById('s4-word').textContent=w.word;
+  document.getElementById('s4-eng').textContent=w.eng;
+  document.getElementById('s4-emoji').textContent=w.emoji;
+  document.getElementById('s5-word').textContent=w.word;
+  document.getElementById('s5-emoji').textContent=w.emoji;
+  document.getElementById('s5-word2').textContent=w.word;
+  document.getElementById('s5-eng').textContent=w.eng;
+  document.getElementById('s5-breakdown').innerHTML=
+    '<strong style="color:var(--green)">'+(w.tone?w.init+'<sup>้</sup>':w.init)+'</strong> + '+
+    '<strong style="color:var(--blue)">โ-ะ</strong> + '+
+    '<strong style="color:var(--orange)">'+w.final+'</strong>';
+}
+
+function buildProgress(){
+  const bar=document.getElementById('progressBar');
+  bar.innerHTML='';
+  for(let i=1;i<=totalSteps;i++){
+    const d=document.createElement('div');
+    d.className='dot'+(i<current?' done':i===current?' active':'');
+    bar.appendChild(d);
+  }
+}
+
+function resetStep2(){
+  kickDone=false;
+
+  // tone mark on init card
+  const toneEl=document.getElementById('tone-overlay');
+  const w=WORDS[activeIndex];
+  if(w.tone){
+    toneEl.textContent=w.tone;
+    toneEl.style.display='block';
+  } else {
+    toneEl.style.display='none';
+  }
+
+  // vowel card reset
+  const vowelChar=document.getElementById('vowel-char');
+  vowelChar.textContent='โ-ะ';
+  const vowelCard=document.getElementById('s-vowel-card');
+  vowelCard.classList.remove('shatter');
+  vowelCard.style.cssText='';
+  void vowelCard.offsetWidth;
+
+  const vowelCol=document.getElementById('vowel-col');
+  vowelCol.style.visibility='visible';
+  vowelCol.style.opacity='1';
+  document.getElementById('vowel-badge').style.opacity='1';
+
+  // final card reset
+  const finalCard=document.getElementById('s-final-card');
+  finalCard.classList.remove('charge');
+  finalCard.style.cssText='';
+  void finalCard.offsetWidth;
+
+  // shield label
+  document.getElementById('shield-label').style.display='block';
+
+  // dashes
+  document.getElementById('dash1').style.opacity='1';
+  document.getElementById('dash2').style.opacity='1';
+
+  // burst particles
+  ['burst1','burst2','burst3'].forEach(id=>{
+    const b=document.getElementById(id);
+    b.style.display='none';
+    b.classList.remove('active');
+    void b.offsetWidth;
+  });
+
+  // result
+  const rw=document.getElementById('result-word');
+  rw.classList.remove('pop');
+  rw.style.cssText='font-size:80px;font-weight:800;color:var(--green);font-family:Sarabun,sans-serif;opacity:0;transform:scale(.5);margin-top:8px;pointer-events:none;';
+
+  // button — update text without destroying kick-label span
+  const btn=document.getElementById('kickBtn');
+  btn.disabled=false;
+  const klSpan=document.getElementById('kick-label');
+  if(klSpan) klSpan.textContent=w.final;
+  btn.onclick=doKick;
+}
+
+function doKick(){
+  if(kickDone)return;
+  kickDone=true;
+
+  const btn       = document.getElementById('kickBtn');
+  btn.disabled=true;
+  btn.textContent='💥 โดน!';
+
+  const finalCard  = document.getElementById('s-final-card');
+  const vowelCard  = document.getElementById('s-vowel-card');
+  const vowelCol   = document.getElementById('vowel-col');
+  const vowelBadge = document.getElementById('vowel-badge');
+  const dash1      = document.getElementById('dash1');
+  const dash2      = document.getElementById('dash2');
+  const resultWord = document.getElementById('result-word');
+  const shieldLabel= document.getElementById('shield-label');
+
+  // === PHASE 1 (0ms): Shield charges across ===
+  finalCard.classList.add('charge');
+
+  // === PHASE 2 (300ms): Vowel card shatters, ะ bursts ===
+  setTimeout(()=>{
+    if(!kickDone)return;
+    vowelCard.classList.add('shatter');
+    shieldLabel.style.display='none';
+
+    // show ะ burst particles
+    ['burst1','burst2','burst3'].forEach(id=>{
+      const b=document.getElementById(id);
+      b.style.display='block';
+      void b.offsetWidth;
+    });
+
+    // fade dashes
+    dash1.style.opacity='0';
+    dash2.style.opacity='0';
+    vowelBadge.style.opacity='0';
+  },300);
+
+  // === PHASE 3 (550ms): vowel col fully hidden ===
+  setTimeout(()=>{
+    if(!kickDone)return;
+    vowelCol.style.visibility='hidden';
+  },550);
+
+  // === PHASE 4 (1200ms): result word pops in ===
+  setTimeout(()=>{
+    if(!kickDone)return;
+    resultWord.classList.add('pop');
+  },1200);
+}
+
+function triggerBlend(){
+  const w=WORDS[activeIndex];
+  const parts=['bp1','bp2','bp3'];
+  if(w.tone) parts.push('bp4');
+  parts.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    el.classList.remove('show');void el.offsetWidth;
+    setTimeout(()=>el.classList.add('show'),i*220+100);
+  });
+  ['barrow','bres','sparkles'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.classList.remove('show');void el.offsetWidth;
+  });
+  const delay=parts.length*220+100;
+  setTimeout(()=>document.getElementById('barrow').classList.add('show'),delay);
+  setTimeout(()=>document.getElementById('bres').classList.add('show'),delay+200);
+  setTimeout(()=>document.getElementById('sparkles').classList.add('show'),delay+900);
+}
+
+function showStep(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step'+n).classList.add('active');
+  document.getElementById('stepCounter').textContent=n+' / '+totalSteps;
+  document.getElementById('btnBack').disabled=n===1;
+  const isLast=activeIndex>=WORDS.length-1;
+  const nw=isLast?null:WORDS[activeIndex+1];
+  document.getElementById('btnNext').textContent=
+    n===totalSteps?(isLast?'🏠 หน้าหลัก':'▶ '+nw.word):'ถัดไป ▶';
+  buildProgress();
+  if(n===2)resetStep2();
+  if(n===4)triggerBlend();
+}
+
+function goNext(){
+  if(current<totalSteps){current++;showStep(current);}
+  else{if(activeIndex<WORDS.length-1)startWord(activeIndex+1);else goHome();}
+}
+function goBack(){if(current>1){current--;showStep(current);}}
+
+buildHome();
+</script>
+</body>
+</html>
